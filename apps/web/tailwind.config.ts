@@ -5,7 +5,7 @@ import sharedConfig from "@repo/tailwind-config";
 
 const config: Pick<Config, "content" | "presets"> = {
   content: ["./app/**/*.tsx"],
-  presets: [sharedConfig],
+  presets: [sharedConfig]
 };
 
 export default config;
