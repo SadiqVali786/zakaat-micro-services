@@ -1,5 +1,5 @@
 {
-  "name": "with-tailwind",
+  "name": "zakaat-micro-services",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -9,6 +9,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
+    "eslint": "^9.21.0",
     "prettier": "^3.5.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "turbo": "^2.4.4"
