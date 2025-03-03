@@ -13,6 +13,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@repo/mongo-db": "*",
     "@types/bun": "latest",
     "eslint": "^9.21.0"
   },

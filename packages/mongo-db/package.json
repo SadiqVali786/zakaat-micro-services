@@ -3,17 +3,24 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "check-types": "tsc --noEmit",
-    "lint": "eslint src/ --max-warnings 0"
+    "lint": "eslint src/ --max-warnings 0",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev --skip-generate",
+    "db:deploy": "prisma migrate deploy"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prisma": "^6.4.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1"
   }
 }
