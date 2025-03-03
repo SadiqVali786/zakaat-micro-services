@@ -7,7 +7,7 @@ type BearState = {
   increase: (by: number) => void;
 };
 
-const useBearStore = create<BearState>()(
+export const useBearStore = create<BearState>()(
   immer(
     devtools(
       persist(
@@ -25,5 +25,3 @@ const useBearStore = create<BearState>()(
     )
   )
 );
-
-export default useBearStore;
