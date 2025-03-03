@@ -15,5 +15,8 @@
   },
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "redis": "^4.7.0"
   }
 }
