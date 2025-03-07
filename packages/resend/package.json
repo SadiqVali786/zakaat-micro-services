@@ -3,17 +3,25 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "check-types": "tsc --noEmit",
-    "lint": "eslint src/ --max-warnings 0"
+    "lint": "eslint src/ --max-warnings 0",
+    "dev": "email dev --dir src/emails"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "react-email": "3.0.7"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.33",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "resend": "^4.1.2"
   }
 }
