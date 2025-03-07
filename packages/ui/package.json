@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@react-email/components": "^0.0.33",
+    "imagekitio-next": "^1.0.1",
     "resend": "^4.1.2"
   }
 }
