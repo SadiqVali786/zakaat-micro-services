@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@repo/ui": "*",
+    "imagekit": "^6.0.0",
+    "imagekitio-next": "^1.0.1",
     "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
