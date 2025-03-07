@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "docker start zakaat-mongodb zakaat-redis && turbo run dev && cd packages/mongo-db/ && bunx prisma studio && cd ../..",
+    "dev": "docker start zakaat-mongodb zakaat-redis && turbo run dev && cd packages/mongodb/ && bunx prisma studio && cd ../..",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
