@@ -30,7 +30,12 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.21.0",
     "postcss": "^8.5.1",
+    "react-email": "^3.0.7",
     "tailwindcss": "^3.4.17",
     "typescript": "5.7.3"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.33",
+    "resend": "^4.1.2"
   }
 }

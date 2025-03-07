@@ -10,6 +10,7 @@ const MyEmail = ({ username }: { username: string }) => {
       <Button
         href="https://example.com"
         style={{ background: "#000", color: "#fff", padding: "12px 20px" }}
+        className="ui-bg-black"
       >
         Click me Brother
       </Button>

@@ -6,7 +6,8 @@
     "CLOUDINARY_API_SECRET",
     "IMAGEKIT_PRIVATE_KEY",
     "NEXT_PUBLIC_URL_ENDPOINT",
-    "NEXT_PUBLIC_PUBLIC_KEY"
+    "NEXT_PUBLIC_PUBLIC_KEY",
+    "RESEND_API_KEY"
   ],
   "globalDependencies": ["**/.env.*local", "**/.env", ".env", ".env.local", "tsconfig.json"],
   "ui": "tui",
