@@ -18,7 +18,7 @@
     "typescript": "^5.0.0"
   },
   "exports": {
-    "./*": "./src/*.tsx"
+    "./*": "./src/*.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1"
