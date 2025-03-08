@@ -1,4 +1,4 @@
-# web-sockets-server
+# web-sockets-be
 
 To install dependencies:
 
