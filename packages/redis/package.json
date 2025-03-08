@@ -14,7 +14,7 @@
     "typescript": "^5.0.0"
   },
   "exports": {
-    ".": "./src/index.ts"
+    "./*": "./src/*.tsx"
   },
   "dependencies": {
     "redis": "^4.7.0"
