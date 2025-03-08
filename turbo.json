@@ -7,7 +7,11 @@
     "IMAGEKIT_PRIVATE_KEY",
     "NEXT_PUBLIC_URL_ENDPOINT",
     "NEXT_PUBLIC_PUBLIC_KEY",
-    "RESEND_API_KEY"
+    "RESEND_API_KEY",
+    "RAZORPAY_KEY_ID",
+    "RAZORPAY_KEY_SECRET",
+    "EXPRESSJS_PAYMENTS_SERVER_PORT",
+    "CLERK_SIGN_IN_URL"
   ],
   "globalDependencies": ["**/.env.*local", "**/.env", ".env", ".env.local", "tsconfig.json"],
   "ui": "tui",
