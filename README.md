@@ -6,7 +6,7 @@ Haqque Zakat is a comprehensive microservices-based platform that revolutionizes
 
 ### Figma UI/UX Design Live Link
 
-<https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=80-18620&t=n6i2BK4lvv9QF8oc-1>
+<https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=1215-10090&t=WCxBhpaklPYaa4mV-1>
 
 ### Landing Page Sneak Peak
 
@@ -121,7 +121,7 @@ bun dev
 
 ## 🌐 Live Demo
 
-- **UI/UX Design:** [Figma Prototype](https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=80-18620&t=n6i2BK4lvv9QF8oc-1)
+- **UI/UX Design:** [Figma Prototype](https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=1215-10090&t=WCxBhpaklPYaa4mV-1)
 - **Production App:** [Live Demo]
 
 ## 📈 Performance Metrics
