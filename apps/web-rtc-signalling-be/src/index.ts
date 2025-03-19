@@ -5,6 +5,18 @@ import { JWTPayload } from "jose";
 import { JOSEError } from "jose/errors";
 import { verifyJWT } from "@repo/common/verify-jwt";
 import { UserRole } from "@repo/mongodb";
+import { UserManager } from "./user-manager";
+import {
+  applicantToServerBusySchema,
+  applicantToServerBusyType,
+  applicantToServerPermissionSchema,
+  applicantToServerPermissionType,
+  donorToServerConsentSchema,
+  donorToServerConsentType,
+  TypesOfMsgsFromApplicantToServer,
+  TypesOfMsgsFromDonorToServer,
+  TypesOfMsgsFromServerToApplicant
+} from "./types";
 
 type Client = {
   sub: string;
@@ -16,13 +28,15 @@ type Client = {
 
 export type ExtendedWebSocket = WebSocket & {
   userId: string;
+  email: string;
   role: string;
-  avatar: string;
+  picture: string;
   fullname: string;
 };
 
 const server = createServer();
 const wss = new WebSocketServer({ noServer: true });
+const userManager = UserManager.getInstance();
 
 const authenticate = async (
   request: IncomingMessage,
@@ -63,10 +77,76 @@ const authenticate = async (
 };
 
 wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
+  ws.userId = client.sub;
+  ws.fullname = client.name;
+  ws.role = client.role;
+  ws.picture = client.picture;
+
+  userManager.addUser(ws);
+
   ws.on("error", console.error);
 
-  ws.on("message", async (data: string | Buffer) => {
-    console.log(`Received message ${data} from user ${client}`);
+  // Event listener for incoming messages from the client
+  ws.on("message", async (message: string) => {
+    // console.log(`Received message ${data} from user ${client}`);
+    // TODO: add rate limitting logic here
+    try {
+      const parsedMessage:
+        | donorToServerConsentType
+        | applicantToServerPermissionType
+        | applicantToServerBusyType = JSON.parse(message);
+      if (parsedMessage.type === TypesOfMsgsFromDonorToServer.consent) {
+        if (ws.role !== UserRole.Donor) return;
+        const payload = donorToServerConsentSchema.parse(parsedMessage.payload);
+        const socket = userManager.getSocket(payload.applicantId);
+        socket?.send(
+          JSON.stringify({
+            type: TypesOfMsgsFromServerToApplicant.consent,
+            payload: {
+              donorId: ws.userId,
+              fullname: ws.fullname,
+              picture: ws.picture
+            }
+          })
+        );
+      } else if (parsedMessage.type === TypesOfMsgsFromApplicantToServer.busy) {
+        if (ws.role !== UserRole.Applicant) return;
+        const payload = applicantToServerBusySchema.parse(parsedMessage.payload);
+        const socket = userManager.getSocket(payload.donorId);
+        socket?.send(
+          JSON.stringify({
+            type: parsedMessage.type,
+            payload: {
+              applicantId: ws.userId,
+              fullname: ws.fullname,
+              avatar: ws.picture,
+              status: payload.status
+            }
+          })
+        );
+      } else if (parsedMessage.type === TypesOfMsgsFromApplicantToServer.permission) {
+        if (ws.role !== UserRole.Applicant) return;
+        const payload = applicantToServerPermissionSchema.parse(parsedMessage.payload);
+        const socket = userManager.getSocket(payload.donorId);
+        socket?.send(
+          JSON.stringify({
+            type: parsedMessage.type,
+            payload: {
+              applicantId: ws.userId,
+              status: payload.status,
+              applicantPeerId: payload.applicantPeerId
+            }
+          })
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  // Event listener for when a client disconnects
+  ws.on("close", () => {
+    userManager.removeUser(ws.userId);
   });
 });
 
