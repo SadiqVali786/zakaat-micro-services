@@ -145,6 +145,7 @@
       "name": "web-sockets-be",
       "dependencies": {
         "@repo/common": "*",
+        "@repo/mongodb": "*",
         "@repo/redis": "*",
         "jose": "^6.0.10",
         "ws": "^8.18.1",
@@ -340,7 +341,9 @@
         "zustand": "^5.0.3",
       },
       "devDependencies": {
+        "@repo/common": "*",
         "@repo/eslint-config": "*",
+        "@repo/mongodb": "*",
         "@repo/typescript-config": "*",
         "@types/bun": "latest",
         "eslint": "^9.22.0",

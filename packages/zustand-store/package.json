@@ -12,7 +12,9 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
+    "@repo/common": "*",
     "@repo/typescript-config": "*",
+    "@repo/mongodb": "*",
     "@types/bun": "latest",
     "eslint": "^9.22.0"
   },
