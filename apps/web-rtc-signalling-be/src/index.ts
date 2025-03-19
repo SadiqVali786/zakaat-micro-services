@@ -19,17 +19,17 @@ import {
 } from "./types";
 
 type Client = {
-  sub: string;
+  userId: string;
   email: string;
   picture: string;
-  name: string;
+  fullname: string;
   role: UserRole;
 };
 
 export type ExtendedWebSocket = WebSocket & {
   userId: string;
   email: string;
-  role: string;
+  role: UserRole;
   picture: string;
   fullname: string;
 };
@@ -59,11 +59,11 @@ const authenticate = async (
     // console.log("Decoded data from the token = ", decoded);
     if (decoded?.userId) {
       const client: Client = {
-        sub: decoded.sub as string,
+        userId: decoded.userId as string,
         role: decoded.role as UserRole,
+        email: decoded.email as string,
         picture: decoded.picture as string,
-        name: decoded.name as string,
-        email: decoded.email as string
+        fullname: decoded.fullname as string
       };
       next(null, client);
     }
@@ -77,9 +77,10 @@ const authenticate = async (
 };
 
 wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
-  ws.userId = client.sub;
-  ws.fullname = client.name;
+  ws.userId = client.userId;
+  ws.fullname = client.fullname;
   ws.role = client.role;
+  ws.email = client.email;
   ws.picture = client.picture;
 
   userManager.addUser(ws);
