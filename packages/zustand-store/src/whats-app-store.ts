@@ -52,7 +52,7 @@ type WhatsAppState = {
   setLastSeen: (userId: string, lastSeen: Date) => void; // TODO: update backend for this
 };
 
-const useWhatsAppStore = create<WhatsAppState>()(
+export const useWhatsAppStore = create<WhatsAppState>()(
   immer(
     persist(
       (set) => ({
@@ -106,5 +106,3 @@ const useWhatsAppStore = create<WhatsAppState>()(
     )
   )
 );
-
-export default useWhatsAppStore;
