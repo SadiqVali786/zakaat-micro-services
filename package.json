@@ -29,8 +29,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "zakaat-micro-services": "."
-  }
+  ]
 }
