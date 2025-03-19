@@ -157,42 +157,6 @@ export const createApplicationAction = async (
   }
 };
 
-export const editApplicationAction = async (
-  previousState: any,
-  payload: z.infer<typeof applicationSchema>
-) => {
-  try {
-    payload = applicationSchema.parse(payload);
-    const session = await auth();
-    if (!session || !session.user || session.user.role !== UserRole.Verifier)
-      throw new ErrorHandler(
-        "You must be authenticated as VERIFIER to access this resource",
-        "UNAUTHORIZED"
-      );
-    // #########################################################
-    const applicant = await prisma.user.findUnique({
-      where: { phoneNum: payload.phoneNum, role: UserRole.Applicant }
-    });
-    if (!applicant) return new ErrorHandler("applicant is not registered", "NOT_FOUND");
-
-    const resukt = await prisma.application.update({
-      where: { authorId: applicant.id },
-      data: {
-        status: STATUS.VERIFIED,
-        verifierUserId: session?.user.id,
-        amount: payload.amount,
-        rating: payload.rating,
-        reason: payload.reason,
-        hide: payload.hide
-      }
-    });
-    return new SuccessResponse("zakaat application edited", 201).serialize();
-    // #########################################################
-  } catch (error) {
-    return standardizedApiError(error);
-  }
-};
-
 export const deleteAplicationAction = async (
   previousState: any,
   payload: z.infer<typeof idSchema>
@@ -208,41 +172,6 @@ export const deleteAplicationAction = async (
     // #########################################################
     await prisma.application.delete({ where: { id: payload.id } });
     return new SuccessResponse("zakaat application deleted", 200).serialize();
-    // #########################################################
-  } catch (error) {
-    return standardizedApiError(error);
-  }
-};
-
-export const searchApplicationByPhoneNum = async (previousState: any, payload: PhoneNum) => {
-  payload = phoneNumSchema.parse(payload);
-  const session = await auth();
-  if (!session || !session.user || session.user.role !== UserRole.Verifier)
-    throw new ErrorHandler(
-      "You must be authenticated as VERIFIER to access this resource",
-      "UNAUTHORIZED"
-    );
-  // #########################################################
-  try {
-    const foundApplication = await prisma.user.findUnique({
-      where: { phoneNum: payload.phoneNum },
-      select: {
-        name: true,
-        selfie: true,
-        writtenApplicationId: {
-          select: { hide: true, amount: true, reason: true, rating: true }
-        }
-      }
-    });
-    if (!foundApplication) {
-      throw new ErrorHandler("No Zakaat application with this UPI Phone Number", "BAD_REQUEST");
-    }
-    const { writtenApplicationId, ...rest } = foundApplication;
-    const application = {
-      ...rest,
-      details: writtenApplicationId
-    };
-    return new SuccessResponse("application found", 200, application).serialize();
     // #########################################################
   } catch (error) {
     return standardizedApiError(error);
