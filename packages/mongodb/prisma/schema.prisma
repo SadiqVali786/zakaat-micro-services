@@ -14,12 +14,93 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  location      Location?
   role          UserRole  @default(Donor)
-  accounts      Account[]
-  sessions      Session[]
+
+  // applicant specific fields
+  selfie               String?
+  writtenApplicationId Application? @relation("Acceptor")
+
+  // verifier specific fields
+  verifiedApplications Application[] @relation("Verifier")
+
+  // donor specific
+  tweets    Tweet[]
+  bookmarks Application[] @relation("DonorBookmarks")
+  donated   Application[] @relation("DonorDonated")
+  followers Connection[]  @relation("followers")
+  following Connection[]  @relation("following")
+
+  // oauth specific fields
+  accounts Account[]
+  sessions Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Connection {
+  id   String @id @default(cuid()) @map("_id")
+  from String @db.ObjectId
+  to   String @db.ObjectId
+
+  follower  User @relation("followers", fields: [to], references: [id])
+  following User @relation("following", fields: [from], references: [id])
+
+  @@unique([from, to])
+  @@index([from])
+}
+
+model Application {
+  // id               String  @id @default(cuid()) @map("_id")
+  id               BigInt  @id @map("_id")
+  authorId         String  @unique @db.ObjectId
+  amount           Int
+  reason           String
+  status           STATUS
+  hide             Boolean @default(false)
+  rating           Int
+  bookmarkedUserId String? @db.ObjectId
+  verifierUserId   String? @db.ObjectId
+  donatedUserId    String? @db.ObjectId
+
+  Acceptor       User  @relation("Acceptor", fields: [authorId], references: [id], onDelete: Cascade)
+  Verifier       User? @relation("Verifier", fields: [verifierUserId], references: [id]) // IMP: DON"T ALLOW VERIFIER ACCOUNT INFO TO GET DELETED FROM DB
+  DonorBookmarks User? @relation("DonorBookmarks", fields: [bookmarkedUserId], references: [id])
+  DonorDonated   User? @relation("DonorDonated", fields: [donatedUserId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tweet {
+  id       String @id @default(cuid()) @map("_id")
+  text     String
+  authorId String @db.ObjectId
+
+  Donor User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+type Location {
+  type        String  @default("Point") // Must be "Point" for geospatial queries
+  coordinates Float[] // [longitude, latitude]
+}
+
+enum STATUS {
+  CREATED
+  DONATED
+  VERIFIED
+  BOOKMARKED
+}
+
+enum UserRole {
+  Admin
+  Verifier
+  Donor
+  Applicant
 }
 
 model Account {
@@ -62,11 +143,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum UserRole {
-  Admin
-  Verifier
-  Donor
-  Applicant
 }
