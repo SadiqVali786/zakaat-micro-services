@@ -14,17 +14,23 @@ Haqque Zakat is a comprehensive microservices-based platform that revolutionizes
 
 ## 🏗️ System Architecture
 
-```mermaid
-graph TD
-    A[Web App] --> B[API Gateway]
-    C[Mobile App] --> B
-    B --> D[Auth Service]
-    B --> E[User Service]
-    B --> F[Payment Service]
-    B --> G[AI Service]
-    B --> H[Chat Service]
-    All --> I[(Database)]
-```
+![High Level Design Diagram](/apps/nextjs-web-app/public/images/hld-diagram.png)
+
+Our architecture consists of:
+
+- **Client Layer:**
+  - Browser Client
+  - React Native Expo Client (Android & iOS)
+- **Server Components:**
+  - NextJS Web App (Frontend & Backend for Web, Backend for Mobile)
+  - WebSocket Server Fleet (Real-time Chat)
+  - Golang WebRTC Signaling Server
+  - FastAPI Face Verification Server
+  - Worker Fleet (Database Operations)
+- **Infrastructure:**
+  - Redis (Pub/Sub & Caching)
+  - Redis Message Queue
+  - MongoDB (with Geospatial Capabilities)
 
 ## 🛠️ Tech Stack
 
@@ -38,11 +44,16 @@ graph TD
 
 ### Backend Infrastructure
 
-- **Database:** MongoDB with Prisma ORM
-- **Authentication:** NextAuth with Google OAuth
+- **Primary Database:** MongoDB with Geospatial Indexing
+- **Caching & Message Queue:** Redis
+- **API Servers:**
+  - NextJS API Routes
+  - FastAPI (Face Verification)
+  - Golang (WebRTC Signaling)
 - **Real-time Communications:**
-  - WebSockets for Chat
+  - WebSocket Fleet for Chat
   - WebRTC for Audio/Video Calls
+- **Worker System:** Distributed Task Processing
 - **Container Orchestration:** Docker & Kubernetes
 - **Media Management:** Cloudinary
 
