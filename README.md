@@ -10,7 +10,7 @@ A Zakaat distribution web app that connects donors with verified, deserving indi
 
 ### Landing Page Sneak Peak
 
-![Zakaat App Details](/public/images/git-display.png)
+![Zakaat App Details](/apps/nextjs-web-app/public/images/git-display.png)
 
 ## Techologies Used
 
