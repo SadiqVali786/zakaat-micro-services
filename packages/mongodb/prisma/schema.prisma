@@ -1,99 +1,127 @@
+// Database configuration
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
+// Prisma Client configuration
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/client"
 }
 
+// User model - Core user entity
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
+  id            String    @id @default(cuid()) @map("_id") @db.ObjectId
   email         String?   @unique
-  emailVerified DateTime?
+  name          String?
   image         String?
-  location      Location?
+  emailVerified DateTime?
   role          UserRole  @default(Donor)
+  location      Location?
+  createdAt     DateTime  @default(now())
+  lastSeen      DateTime  @updatedAt
+  rooms         Room[]    @relation(fields: [roomIds], references: [id])
+  roomIds       String[]  @db.ObjectId
 
-  // applicant specific fields
+  // Applicant fields
   selfie               String?
   writtenApplicationId Application? @relation("Acceptor")
 
-  // verifier specific fields
+  // Verifier fields
   verifiedApplications Application[] @relation("Verifier")
 
-  // donor specific
+  // Donor fields
   tweets    Tweet[]
   bookmarks Application[] @relation("DonorBookmarks")
-  donated   Application[] @relation("DonorDonated")
+  donations Application[] @relation("DonorDonated")
   followers Connection[]  @relation("followers")
   following Connection[]  @relation("following")
 
-  // oauth specific fields
+  // Authentication related
   accounts Account[]
   sessions Session[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
+model Room {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  userIds String[]  @db.ObjectId
+  chats   Message[]
+
+  users User[] @relation(fields: [userIds], references: [id])
+}
+
+model Message {
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  roomId     String        @db.ObjectId
+  senderId   String        @db.ObjectId
+  content    String
+  sentAt     DateTime      @default(now())
+  receivedAt DateTime?
+  seenAt     DateTime?
+  status     MessageStatus @default(Sent)
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+// Social connection between users
 model Connection {
-  id   String @id @default(cuid()) @map("_id")
-  from String @db.ObjectId
-  to   String @db.ObjectId
+  id        String   @id @default(cuid()) @map("_id")
+  from      String   @db.ObjectId
+  to        String   @db.ObjectId
+  createdAt DateTime @default(now())
 
   follower  User @relation("followers", fields: [to], references: [id])
   following User @relation("following", fields: [from], references: [id])
 
-  @@unique([from, to])
-  @@index([from])
+  @@unique([from, to], name: "unique_connection")
 }
 
+// Application model for funding requests
 model Application {
-  // id               String  @id @default(cuid()) @map("_id")
-  id               BigInt  @id @map("_id")
-  authorId         String  @unique @db.ObjectId
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  authorId         String            @unique @db.ObjectId
   amount           Int
   reason           String
-  status           STATUS
-  hide             Boolean @default(false)
+  status           ApplicationStatus @default(Created)
+  hide             Boolean           @default(false)
   rating           Int
-  bookmarkedUserId String? @db.ObjectId
-  verifierUserId   String? @db.ObjectId
-  donatedUserId    String? @db.ObjectId
+  bookmarkedUserId String?           @db.ObjectId
+  verifierUserId   String?           @db.ObjectId
+  donatedUserId    String?           @db.ObjectId
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
-  Acceptor       User  @relation("Acceptor", fields: [authorId], references: [id], onDelete: Cascade)
-  Verifier       User? @relation("Verifier", fields: [verifierUserId], references: [id]) // IMP: DON"T ALLOW VERIFIER ACCOUNT INFO TO GET DELETED FROM DB
-  DonorBookmarks User? @relation("DonorBookmarks", fields: [bookmarkedUserId], references: [id])
-  DonorDonated   User? @relation("DonorDonated", fields: [donatedUserId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Relations
+  author       User  @relation("Acceptor", fields: [authorId], references: [id], onDelete: Cascade)
+  verifier     User? @relation("Verifier", fields: [verifierUserId], references: [id])
+  bookmarkedBy User? @relation("DonorBookmarks", fields: [bookmarkedUserId], references: [id])
+  donatedBy    User? @relation("DonorDonated", fields: [donatedUserId], references: [id])
 }
 
+// Tweet model for user posts
 model Tweet {
-  id       String @id @default(cuid()) @map("_id")
-  text     String
-  authorId String @db.ObjectId
-
-  Donor User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  authorId  String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
+// Custom type for geospatial data
 type Location {
-  type        String  @default("Point") // Must be "Point" for geospatial queries
+  type        String  @default("Point") // Required for MongoDB geospatial queries
   coordinates Float[] // [longitude, latitude]
 }
 
-enum STATUS {
-  CREATED
-  DONATED
-  VERIFIED
-  BOOKMARKED
+// Enums
+enum ApplicationStatus {
+  Created
+  Donated
+  Verified
+  Bookmarked
 }
 
 enum UserRole {
@@ -103,26 +131,34 @@ enum UserRole {
   Applicant
 }
 
+enum MessageStatus {
+  Sent
+  Recieved
+  Seen
+}
+
+// Authentication models (NextAuth.js)
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
+  refresh_token     String?  @db.String
+  access_token      String?  @db.String
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
+  id_token          String?  @db.String
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
 }
 
 model Session {
@@ -130,10 +166,13 @@ model Session {
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
 }
 
 model VerificationToken {
@@ -143,4 +182,5 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verificationTokens")
 }
