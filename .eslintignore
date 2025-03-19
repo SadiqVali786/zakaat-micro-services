@@ -3,6 +3,9 @@ target/
 .next/
 build/
 dist/
+
+/examples/
+
 packages/eslint-plugin-turbo/__fixtures__
 packages/create-turbo/templates
 crates/*/tests/**
