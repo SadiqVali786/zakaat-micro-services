@@ -25,7 +25,7 @@ export const donorToServerConsentSchema = z.object({
 });
 export const serverToApplicantConsentSchema = z.object({
   donorId: z.string().cuid(),
-  fullname: z.string(),
+  name: z.string(),
   avatar: z.string()
 });
 export const applicantToServerPermissionSchema = z.object({
@@ -44,7 +44,7 @@ export const serverToDonorPermissionSchema = z.object({
 });
 export const serverToDonorBusySchema = z.object({
   applicantId: z.string().cuid(),
-  fullname: z.string(),
+  name: z.string(),
   avatar: z.string(),
   status: z.literal(TypesOfMsgsFromApplicantToServer.busy)
 });

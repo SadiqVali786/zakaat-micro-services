@@ -40,7 +40,7 @@ const WhatsAppPage = () => {
         id: "cm6okc5d10003d09b5e0odp1u",
         role: UserRole.Applicant,
         lastSeen: new Date(),
-        fullname: "Sadiq Vali",
+        name: "Sadiq Vali",
         avatar: "",
         online: true
       });
@@ -51,7 +51,7 @@ const WhatsAppPage = () => {
           id: "cm6ok7le80000d09bezh2k6om",
           role: UserRole.Donor,
           lastSeen: new Date(),
-          fullname: "Sadiq Vali",
+          name: "Sadiq Vali",
           avatar: "",
           online: true
         },
@@ -59,14 +59,14 @@ const WhatsAppPage = () => {
           id: "cm6okc5d10003d09b5e0odp1u",
           role: UserRole.Applicant,
           lastSeen: new Date(),
-          fullname: "Shaheena",
+          name: "Shaheena",
           avatar: "",
           online: true
         }
       });
       // {
       //   userId: "cm6ok7le80000d09bezh2k6om",
-      //   fullname: "Sadiq Vali",
+      //   name: "Sadiq Vali",
       //   role: "DONOR",
       //   avatar: "https://avatar.vercel.sh/Sadiq%20Vali",
       //   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTZvazdsZTgwMDAwZDA5YmV6aDJrNm9tIiwiZnVsbG5hbWUiOiJTYWRpcSBWYWxpIiwicm9sZSI6IkRPTk9SIiwiYXZhdGFyIjoiaHR0cHM6Ly9hdmF0YXIudmVyY2VsLnNoL1NhZGlxJTIwVmFsaSJ9.BWNfCAckWQjIHmaSQ3_cIWEPJ__x5KANq4qWgVo3_qc"
@@ -74,7 +74,7 @@ const WhatsAppPage = () => {
 
       // {
       //   userId: "cm6okc5d10003d09b5e0odp1u",
-      //   fullname: "Shaheena",
+      //   name: "Shaheena",
       //   role: "APPLICANT",
       //   avatar: "https://avatar.vercel.sh/Shaheena",
       //   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTZva2M1ZDEwMDAzZDA5YjVlMG9kcDF1IiwiZnVsbG5hbWUiOiJTaGFoZWVuYSIsInJvbGUiOiJBUFBMSUNBTlQiLCJhdmF0YXIiOiJodHRwczovL2F2YXRhci52ZXJjZWwuc2gvU2hhaGVlbmEifQ.qzUOc0TAU2ourHe7QMN54wEwKfnfdYd1cXhgqXxB45M"
@@ -153,7 +153,7 @@ const WhatsAppPage = () => {
   return (
     <div>
       <h1>WhatsApp Clone</h1>
-      <p>User: {user?.fullname}</p>
+      <p>User: {user?.name}</p>
       <p>Status: {isConnected ? "Connected" : "Disconnected"}</p>
       <button onClick={disconnect}>Disconnect</button>
 
@@ -188,7 +188,7 @@ const WhatsAppPage = () => {
                 fontWeight: selectedRoomId === room?.id ? "bold" : "normal"
               }}
             >
-              {room?.name} ({room?.participients.map((p) => users[p.userId]?.fullname).join(", ")})
+              {room?.name} ({room?.participients.map((p) => users[p.userId]?.name).join(", ")})
             </li>
           ))}
         </ul>
@@ -202,7 +202,7 @@ const WhatsAppPage = () => {
               .find((r) => r.id === selectedRoomId)
               ?.messages.map((m) => (
                 <div key={m.messageId}>
-                  {users[m.senderId]?.fullname}: {m.message} - {m.status}
+                  {users[m.senderId]?.name}: {m.message} - {m.status}
                   {m.status === ChatMessageStatus.MessageRecieved && (
                     <button
                       onClick={() =>

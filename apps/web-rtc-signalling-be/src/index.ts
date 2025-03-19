@@ -22,7 +22,7 @@ type Client = {
   userId: string;
   email: string;
   picture: string;
-  fullname: string;
+  name: string;
   role: UserRole;
 };
 
@@ -31,7 +31,7 @@ export type ExtendedWebSocket = WebSocket & {
   email: string;
   role: UserRole;
   picture: string;
-  fullname: string;
+  name: string;
 };
 
 const server = createServer();
@@ -63,7 +63,7 @@ const authenticate = async (
         role: decoded.role as UserRole,
         email: decoded.email as string,
         picture: decoded.picture as string,
-        fullname: decoded.fullname as string
+        name: decoded.name as string
       };
       next(null, client);
     }
@@ -78,7 +78,7 @@ const authenticate = async (
 
 wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
   ws.userId = client.userId;
-  ws.fullname = client.fullname;
+  ws.name = client.name;
   ws.role = client.role;
   ws.email = client.email;
   ws.picture = client.picture;
@@ -105,7 +105,7 @@ wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage, client: C
             type: TypesOfMsgsFromServerToApplicant.consent,
             payload: {
               donorId: ws.userId,
-              fullname: ws.fullname,
+              name: ws.name,
               picture: ws.picture
             }
           })
@@ -119,7 +119,7 @@ wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage, client: C
             type: parsedMessage.type,
             payload: {
               applicantId: ws.userId,
-              fullname: ws.fullname,
+              name: ws.name,
               avatar: ws.picture,
               status: payload.status
             }

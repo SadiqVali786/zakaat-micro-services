@@ -53,7 +53,7 @@ const Sender = () => {
       socket.onmessage = async (event) => {
         const message = JSON.parse(event.data);
         if (message.type === "BUSY") {
-          alert(`${message.payload.fullname} is talking with someone else`);
+          alert(`${message.payload.name} is talking with someone else`);
         } else if (message.type === "PERMISSION") {
           setRemotePeerId(message.payload.applicantPeerId);
         }

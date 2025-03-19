@@ -8,7 +8,7 @@ type UserType = {
   id: string;
   role: UserRole;
   lastSeen: Date;
-  fullname: string;
+  name: string;
   avatar: string;
   online: boolean;
 };
