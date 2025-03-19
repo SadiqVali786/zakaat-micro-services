@@ -1,0 +1,26 @@
+{
+  "name": "@repo/react-hot-toast",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src/ --max-warnings 0"
+  },
+  "exports": {
+    ".": "./src/index.tsx"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/bun": "latest",
+    "eslint": "^9.22.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "next": "^15.2.1"
+  },
+  "dependencies": {
+    "react-hot-toast": "^2.5.2"
+  }
+}

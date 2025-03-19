@@ -1,0 +1,30 @@
+{
+  "name": "web-rtc-signalling-be",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "bunx tsc --noEmit",
+    "lint": "bunx eslint src/ --max-warnings 0",
+    "start": "bun run src/index.ts",
+    "dev": "bun run --watch src/index.ts",
+    "build": "echo 'No build step needed with Bun'"
+  },
+  "dependencies": {
+    "@repo/common": "*",
+    "@repo/mongodb": "*",
+    "jose": "^6.0.10",
+    "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/bun": "latest",
+    "@types/ws": "^8.18.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.22.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

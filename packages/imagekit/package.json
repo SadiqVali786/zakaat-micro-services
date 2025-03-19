@@ -1,0 +1,29 @@
+{
+  "name": "@repo/imagekit",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src/ --max-warnings 0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/bun": "latest",
+    "eslint": "^9.22.0"
+  },
+  "exports": {
+    ".": "./src/index.tsx"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "next": "^15.2.1"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "imagekit": "^6.0.0",
+    "imagekitio-next": "^1.0.1",
+    "tailwind-merge": "^3.0.2"
+  }
+}

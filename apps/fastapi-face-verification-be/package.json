@@ -1,0 +1,12 @@
+{
+  "name": "fast-api-face-verification-be",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "uvicorn main:app --reload --host 127.0.0.1 --port 8000",
+    "start": "uvicorn main:app --host 0.0.0.0 --port 8000",
+    "build": "echo 'No build step for FastAPI in package.json'",
+    "test": "echo 'No tests specified'",
+    "check-types": "mypy .",
+    "lint": "ruff check . --fix"
+  }
+}

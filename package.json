@@ -1,0 +1,33 @@
+{
+  "name": "zakaat-micro-services",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "docker start zakaat-mongodb zakaat-redis && turbo run dev",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "studio": "turbo run db:studio",
+    "push": "turbo run db:push",
+    "generate": "turbo run db:generate",
+    "migrate": "turbo run db:migrate"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "eslint": "^9.22.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.4.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

@@ -1,0 +1,9 @@
+node_modules/
+target/
+.next/
+build/
+dist/
+packages/eslint-plugin-turbo/__fixtures__
+packages/create-turbo/templates
+crates/*/tests/**
+crates/*/js/src/compiled
