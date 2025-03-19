@@ -4,13 +4,11 @@
 import { auth } from "@/auth";
 import { APPLICATIONS_PER_PAGE, TWEETS_PER_PAGE } from "@/config/app.config";
 import APP_PATHS from "@/config/path.config";
-import prisma from "@/db";
-import { ErrorHandler, standardizedApiError } from "@/lib/api-error-success-handlers/error";
-import { SuccessResponse } from "@/lib/api-error-success-handlers/success";
-import { applicationSchema } from "@/lib/validators/application.validator";
-import { idSchema } from "@/lib/validators/global";
-import { phoneNumSchema } from "@/lib/validators/search.validators";
-import { ROLE, STATUS } from "@prisma/client";
+import { ErrorHandler, standardizedApiError } from "@/lib/api-handlers/error";
+import { SuccessResponse } from "@/lib/api-handlers/success";
+import { applicationSchema } from "@/validators/application.validator";
+import { idSchema } from "@/validators/global";
+import { prisma, STATUS, UserRole } from "@repo/mongodb";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -20,7 +18,7 @@ export const fetchInfiniteApplicationsFeed = async (previousState: any, payload:
     console.log(payload);
     // payload = idSchema.parse(payload); // TODO: write Distance Schema
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -130,14 +128,14 @@ export const createApplicationAction = async (
   try {
     payload = applicationSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.VERIFIER)
+    if (!session || !session.user || session.user.role !== UserRole.Verifier)
       throw new ErrorHandler(
         "You must be authenticated as VERIFIER to access this resource",
         "UNAUTHORIZED"
       );
     // #########################################################
     const applicant = await prisma.user.findUnique({
-      where: { phoneNum: payload.phoneNum, role: ROLE.ACCEPTOR }
+      where: { phoneNum: payload.phoneNum, role: UserRole.Applicant }
     });
     if (!applicant) return new ErrorHandler("applicant is not registered", "NOT_FOUND");
 
@@ -166,14 +164,14 @@ export const editApplicationAction = async (
   try {
     payload = applicationSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.VERIFIER)
+    if (!session || !session.user || session.user.role !== UserRole.Verifier)
       throw new ErrorHandler(
         "You must be authenticated as VERIFIER to access this resource",
         "UNAUTHORIZED"
       );
     // #########################################################
     const applicant = await prisma.user.findUnique({
-      where: { phoneNum: payload.phoneNum, role: ROLE.ACCEPTOR }
+      where: { phoneNum: payload.phoneNum, role: UserRole.Applicant }
     });
     if (!applicant) return new ErrorHandler("applicant is not registered", "NOT_FOUND");
 
@@ -202,7 +200,7 @@ export const deleteAplicationAction = async (
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.VERIFIER)
+    if (!session || !session.user || session.user.role !== UserRole.Verifier)
       throw new ErrorHandler(
         "You must be authenticated as VERIFIER to access this resource",
         "UNAUTHORIZED"
@@ -219,7 +217,7 @@ export const deleteAplicationAction = async (
 export const searchApplicationByPhoneNum = async (previousState: any, payload: PhoneNum) => {
   payload = phoneNumSchema.parse(payload);
   const session = await auth();
-  if (!session || !session.user || session.user.role !== ROLE.VERIFIER)
+  if (!session || !session.user || session.user.role !== UserRole.Verifier)
     throw new ErrorHandler(
       "You must be authenticated as VERIFIER to access this resource",
       "UNAUTHORIZED"
@@ -229,8 +227,7 @@ export const searchApplicationByPhoneNum = async (previousState: any, payload: P
     const foundApplication = await prisma.user.findUnique({
       where: { phoneNum: payload.phoneNum },
       select: {
-        fullname: true,
-        phoneNum: true,
+        name: true,
         selfie: true,
         writtenApplicationId: {
           select: { hide: true, amount: true, reason: true, rating: true }
@@ -260,7 +257,7 @@ export const donateApplicationAction = async (
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -290,7 +287,7 @@ export const bookmarkApplicationAction = async (
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -316,7 +313,7 @@ export const discardApplicationAction = async (
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -377,7 +374,7 @@ export const fetchBookmarkedApplicationsFeedAction = async (
 ) => {
   payload = idSchema.parse(payload);
   const session = await auth();
-  if (!session || !session.user || session.user.role !== ROLE.DONOR)
+  if (!session || !session.user || session.user.role !== UserRole.Donor)
     throw new ErrorHandler(
       "You must be authenticated as DONOR to access this resource",
       "UNAUTHORIZED"
@@ -393,7 +390,7 @@ export const fetchBookmarkedApplicationsFeedAction = async (
         rating: true,
         reason: true,
         Verifier: {
-          select: { id: true, fullname: true, phoneNum: true, selfie: true }
+          select: { id: true, name: true, selfie: true }
         }
       },
       take: TWEETS_PER_PAGE,
@@ -418,7 +415,7 @@ export const fetchGuestApplicationsFeedAction = async (
 ) => {
   payload = idSchema.parse(payload);
   const session = await auth();
-  if (!session || !session.user || session.user.role !== ROLE.DONOR)
+  if (!session || !session.user || session.user.role !== UserRole.Donor)
     throw new ErrorHandler(
       "You must be authenticated as DONOR to access this resource",
       "UNAUTHORIZED"
@@ -433,7 +430,7 @@ export const fetchGuestApplicationsFeedAction = async (
         rating: true,
         reason: true,
         Verifier: {
-          select: { id: true, fullname: true, phoneNum: true, selfie: true }
+          select: { id: true, name: true, selfie: true }
         }
       },
       take: TWEETS_PER_PAGE,
@@ -454,7 +451,7 @@ export const fetchHistoryApplicationsFeedAction = async (
 ) => {
   payload = idSchema.parse(payload);
   const session = await auth();
-  if (!session || !session.user || session.user.role !== ROLE.DONOR)
+  if (!session || !session.user || session.user.role !== UserRole.Donor)
     throw new ErrorHandler(
       "You must be authenticated as DONOR to access this resource",
       "UNAUTHORIZED"
@@ -470,7 +467,7 @@ export const fetchHistoryApplicationsFeedAction = async (
         rating: true,
         reason: true,
         Verifier: {
-          select: { id: true, fullname: true, phoneNum: true, selfie: true }
+          select: { id: true, name: true, selfie: true }
         }
       },
       take: APPLICATIONS_PER_PAGE,
@@ -488,95 +485,3 @@ export const fetchHistoryApplicationsFeedAction = async (
     return standardizedApiError(error);
   }
 };
-
-// export const fetchInfiniteApplicationsFeed = async (
-//   previousState: any,
-//   payload: Distance
-// ) => {
-//   try {
-//     // payload = idSchema.parse(payload);
-//     const session = await auth();
-//     if (!session || !session.user || session.user.role !== ROLE.DONOR)
-//       throw new ErrorHandler(
-//         "You must be authenticated as DONOR to access this resource",
-//         "UNAUTHORIZED"
-//       );
-//     // #########################################################
-//     const applications = (await prisma.$runCommandRaw({
-//       aggregate: "User",
-//       pipeline: [
-//         {
-//           $geoNear: {
-//             near: {
-//               type: "Point",
-//               coordinates: [session.user.longitude, session.user.latitude],
-//             },
-//             distanceField: "distance",
-//             spherical: true,
-//             key: "location",
-//           },
-//         },
-//         {
-//           $match: {
-//             role: "ACCEPTOR",
-//           },
-//         },
-//         {
-//           $lookup: {
-//             from: "Application",
-//             localField: "_id",
-//             foreignField: "authorId",
-//             as: "details",
-//           },
-//         },
-//         {
-//           $addFields: {
-//             details: {
-//               $arrayElemAt: ["$details", 0],
-//             },
-//           },
-//         },
-//         {
-//           $match: {
-//             "details.status": "VERIFIED",
-//           },
-//         },
-//         {
-//           $project: {
-//             fullname: 1,
-//             phoneNum: 1,
-//             selfie: 1,
-//             distance: 1,
-//             "details._id": 1,
-//             "details.hide": 1,
-//             "details.amount": 1,
-//             "details.reason": 1,
-//             "details.rating": 1,
-//           },
-//         },
-//         ...(payload.distance
-//           ? [
-//               {
-//                 $match: {
-//                   distance: { $gt: payload.distance + 1 },
-//                 },
-//               },
-//             ]
-//           : []),
-//       ],
-//       cursor: { batchSize: APPLICATIONS_PER_PAGE + 1 },
-//     })) as PaginatedOutput<Application>;
-//     if (applications.cursor.firstBatch.length === APPLICATIONS_PER_PAGE + 1) {
-//       applications.hasMore = true;
-//       applications.cursor.firstBatch.pop();
-//     } else applications.hasMore = false;
-//     return new SuccessResponse(
-//       "applications feed fetched",
-//       200,
-//       applications
-//     ).serialize();
-//     // #########################################################
-//   } catch (error) {
-//     return standardizedApiError(error);
-//   }
-// };

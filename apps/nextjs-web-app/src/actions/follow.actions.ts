@@ -2,11 +2,10 @@
 "use server";
 
 import { auth } from "@/auth";
-import prisma from "@/db";
-import { ErrorHandler, standardizedApiError } from "@/lib/api-error-success-handlers/error";
-import { SuccessResponse } from "@/lib/api-error-success-handlers/success";
-import { idSchema } from "@/lib/validators/global";
-import { ROLE } from "@prisma/client";
+import { ErrorHandler, standardizedApiError } from "@/lib/api-handlers/error";
+import { SuccessResponse } from "@/lib/api-handlers/success";
+import { idSchema } from "@/validators/global";
+import { prisma, UserRole } from "@repo/mongodb";
 import { z } from "zod";
 
 // DONOR
@@ -14,7 +13,7 @@ export const followDonor = async (previousState: any, payload: z.infer<typeof id
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -48,7 +47,7 @@ export const unfollowDonor = async (previousState: any, payload: z.infer<typeof 
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"

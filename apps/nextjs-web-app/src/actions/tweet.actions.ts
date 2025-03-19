@@ -4,13 +4,11 @@
 import { auth } from "@/auth";
 import { TWEETS_PER_PAGE } from "@/config/app.config";
 import APP_PATHS from "@/config/path.config";
-import prisma from "@/db";
-import { ErrorHandler, standardizedApiError } from "@/lib/api-error-success-handlers/error";
-import { SuccessResponse } from "@/lib/api-error-success-handlers/success";
-import { idSchema } from "@/lib/validators/global";
-import { searchTermSchema } from "@/lib/validators/search.validators";
-import { createTweetSchema } from "@/lib/validators/tweet.validators";
-import { ROLE } from "@prisma/client";
+import { ErrorHandler, standardizedApiError } from "@/lib/api-handlers/error";
+import { SuccessResponse } from "@/lib/api-handlers/success";
+import { idSchema } from "@/validators/global";
+import { createTweetSchema } from "@/validators/tweet.validators";
+import { prisma, UserRole } from "@repo/mongodb";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -19,7 +17,7 @@ export const fetchTweetsAction = async (previousState: any, payload: z.infer<typ
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -31,7 +29,7 @@ export const fetchTweetsAction = async (previousState: any, payload: z.infer<typ
         text: true,
         Donor: {
           select: {
-            fullname: true,
+            name: true,
             selfie: true
           }
         },
@@ -57,7 +55,7 @@ export const createTweetAction = async (
   try {
     payload = createTweetSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -81,7 +79,7 @@ export const fetchFollowingTweetsAction = async (
   try {
     payload = idSchema.parse(payload);
     const session = await auth();
-    if (!session || !session.user || session.user.role !== ROLE.DONOR)
+    if (!session || !session.user || session.user.role !== UserRole.Donor)
       throw new ErrorHandler(
         "You must be authenticated as DONOR to access this resource",
         "UNAUTHORIZED"
@@ -100,7 +98,7 @@ export const fetchFollowingTweetsAction = async (
         text: true,
         Donor: {
           select: {
-            fullname: true,
+            name: true,
             selfie: true
           }
         },
