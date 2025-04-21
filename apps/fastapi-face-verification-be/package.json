@@ -1,0 +1,12 @@
+{
+  "name": "fast-api-face-verification-be",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "conda run -p .venv/ --no-capture-output uvicorn main:app --reload",
+    "start": "uvicorn main:app",
+    "build": "echo 'No build step for FastAPI in package.json'",
+    "test": "echo 'No tests specified'",
+    "check-types": "mypy .",
+    "lint": "ruff check . --fix"
+  }
+}

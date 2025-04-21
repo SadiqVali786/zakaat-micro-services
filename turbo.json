@@ -1,0 +1,51 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "globalEnv": [
+    "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME",
+    "IMAGEKIT_PRIVATE_KEY",
+    "NEXT_PUBLIC_URL_ENDPOINT",
+    "NEXT_PUBLIC_PUBLIC_KEY",
+    "RESEND_API_KEY",
+    "RAZORPAY_KEY_ID",
+    "RAZORPAY_KEY_SECRET",
+    "EXPRESSJS_PAYMENTS_SERVER_PORT",
+    "WEBRTC_SIGNALLING_SERVER_PORT",
+    "NODE_ENV",
+    "DATABASE_URL",
+    "HTTP_WORKER_SERVER_PORT",
+    "WEB_SOCKETS_SERVER_PORT",
+    "FASTAPI_SERVER_PORT",
+    "AUTH_SECRET",
+    "NEXTAUTH_URL",
+    "REDIS_MSG_QUEUE_KEY",
+    "WEB_SOCKETS_BE_PORT",
+    "WEB_RTC_SIGNALLING_BE_PORT",
+    "RAZORPAY_PAYMENTS_BE_PORT",
+    "FASTAPI_FACE_VERIFICATION_BE_PORT"
+  ],
+  "globalDependencies": [
+    "**/.env.*local",
+    "**/.env",
+    ".env",
+    ".env.local",
+    "tsconfig.json"
+  ]
+}

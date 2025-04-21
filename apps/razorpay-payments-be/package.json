@@ -1,0 +1,31 @@
+{
+  "name": "razorpay-payments-be",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "bunx tsc --noEmit",
+    "lint": "bunx eslint src/ --max-warnings 0",
+    "start": "bun run src/index.ts",
+    "dev": "bun run --watch src/index.ts",
+    "build": "echo 'No build step needed with Bun'"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/nodemailer": "^6.4.17"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@repo/common": "*",
+    "@repo/mongodb": "*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemailer": "^6.10.1",
+    "razorpay": "^2.9.6"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "webrtc-signalling-be",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "bunx tsc --noEmit",
+    "lint": "bunx eslint src/ --max-warnings 0",
+    "start": "bun run src/index.ts",
+    "dev": "bun run --watch src/index.ts",
+    "build": "echo 'No build step needed with Bun'"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@repo/common": "*",
+    "dotenv": "^16.4.7",
+    "jose": "^6.0.10",
+    "ws": "^8.18.1"
+  }
+}

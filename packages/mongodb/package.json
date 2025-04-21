@@ -1,0 +1,27 @@
+{
+  "name": "@repo/mongodb",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src/ --max-warnings 0",
+    "seed": "bun run prisma/seed.ts",
+    "reset": "bunx prisma db push --force-reset"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prisma": "^6.5.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "dotenv": "^16.5.0"
+  }
+}

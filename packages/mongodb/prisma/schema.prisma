@@ -1,0 +1,245 @@
+// Database configuration
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Prisma Client configuration
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+// User model - Core user entity
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  email         String    @unique
+  name          String
+  image         String
+  emailVerified DateTime?
+  role          UserRole  @default(DONOR)
+  location      Json?
+  rooms         Room[]    @relation(fields: [roomIds], references: [id])
+  roomIds       String[]  @db.ObjectId
+  isOnline      Boolean   @default(false)
+
+  // Applicant fields
+  selfie             String?
+  upiId              String?
+  writtenApplication Application?          @relation("Acceptor")
+  donationsReceived  RazorpayTransaction[] @relation("ApplicantTransactions")
+  faceEmbedding      Float[] // 512-dimensional vector for face verification
+
+  // Verifier fields
+  verifiedApplications Application[] @relation("Verifier")
+
+  // Donor fields
+  tweets        Tweet[]
+  bookmarks     Application[]         @relation("DonorBookmarks")
+  donations     Application[]         @relation("DonorDonated")
+  followers     Connection[]          @relation("followers")
+  following     Connection[]          @relation("following")
+  donationsSent RazorpayTransaction[] @relation("DonorTransactions")
+
+  // Authentication related
+  accounts Account[]
+  sessions Session[]
+
+  createdAt DateTime  @default(now())
+  lastSeen  DateTime? @updatedAt
+}
+
+model Room {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  participantIds String[]  @db.ObjectId
+  chats          Message[]
+
+  participants User[] @relation(fields: [participantIds], references: [id])
+}
+
+model Message {
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  roomId     String        @db.ObjectId
+  senderId   String        @db.ObjectId
+  content    String
+  sentAt     DateTime      @default(now())
+  receivedAt DateTime?
+  seenAt     DateTime?
+  status     MessageStatus @default(SENT)
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+// Social connection between users
+model Connection {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  from      String   @db.ObjectId
+  to        String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  follower  User @relation("followers", fields: [to], references: [id])
+  following User @relation("following", fields: [from], references: [id])
+
+  @@unique([from, to], name: "unique_connection")
+}
+
+// Application model for funding requests
+model Application {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  authorId         String            @unique @db.ObjectId
+  amount           Int
+  reason           String
+  status           ApplicationStatus @default(VERIFIED)
+  hide             Boolean           @default(false)
+  rating           Int
+  bookmarkedUserId String?           @db.ObjectId
+  verifierUserId   String?           @db.ObjectId
+  donorUserId      String?           @db.ObjectId
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  // Relations
+  author       User  @relation("Acceptor", fields: [authorId], references: [id], onDelete: Cascade)
+  verifier     User? @relation("Verifier", fields: [verifierUserId], references: [id])
+  bookmarkedBy User? @relation("DonorBookmarks", fields: [bookmarkedUserId], references: [id])
+  donatedBy    User? @relation("DonorDonated", fields: [donorUserId], references: [id])
+}
+
+// Tweet model for user posts
+model Tweet {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  authorId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+// Razorpay transaction model
+model RazorpayTransaction {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  referenceId   String        @unique // Our internal reference
+  paymentLinkId String        @unique // Razorpay payment link ID
+  amount        Float
+  currency      String        @default("INR")
+  status        PaymentStatus @default(PENDING)
+  upiId         String
+
+  // Relations
+  donorId     String @db.ObjectId
+  donor       User   @relation("DonorTransactions", fields: [donorId], references: [id])
+  applicantId String @db.ObjectId
+  applicant   User   @relation("ApplicantTransactions", fields: [applicantId], references: [id])
+
+  // Payment details
+  razorpayPaymentId  String?
+  paymentLinkUrl     String
+  paymentMethod      String?
+  paymentDescription String?
+
+  // Metadata
+  metadata      Json?
+  webhookEvents WebhookEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([donorId])
+  @@index([applicantId])
+  @@index([status])
+}
+
+// Webhook event model
+model WebhookEvent {
+  id            String              @id @default(auto()) @map("_id") @db.ObjectId
+  transactionId String              @db.ObjectId
+  transaction   RazorpayTransaction @relation(fields: [transactionId], references: [id])
+  eventType     String
+  payload       Json
+  createdAt     DateTime            @default(now())
+
+  @@index([transactionId])
+}
+
+// Custom type for geospatial data
+type Location {
+  type        String  @default("Point")
+  coordinates Float[] // [longitude, latitude]
+}
+
+// Enums
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  EXPIRED
+}
+
+enum ApplicationStatus {
+  CREATED
+  DONATED
+  VERIFIED
+  BOOKMARKED
+}
+
+enum UserRole {
+  ADMIN
+  VERIFIER
+  DONOR
+  APPLICANT
+}
+
+enum MessageStatus {
+  SENT
+  RECEIVED
+  SEEN
+}
+
+// Authentication models (NextAuth.js)
+model Account {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.String
+  access_token      String?  @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.String
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationTokens")
+}
