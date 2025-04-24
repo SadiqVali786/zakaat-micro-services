@@ -1,0 +1,218 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs-web-app
+  labels:
+    app: nextjs-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextjs-web-app
+  template:
+    metadata:
+      labels:
+        app: nextjs-web-app
+    spec:
+      containers:
+        - name: nextjs-web-app
+          image: nextjs-web-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /usr/src/app/apps/nextjs-web-app/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: zakaat-secret
+            items:
+              - key: .env
+                path: .env
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: razorpay-payments-be
+  labels:
+    app: razorpay-payments-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: razorpay-payments-be
+  template:
+    metadata:
+      labels:
+        app: razorpay-payments-be
+    spec:
+      containers:
+        - name: razorpay-payments-be
+          image: razorpay-payments-be:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+              protocol: TCP
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /usr/src/app/apps/razorpay-payments-be/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: zakaat-secret
+            items:
+              - key: .env
+                path: .env
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-sockets-be
+  labels:
+    app: web-sockets-be
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-sockets-be
+  template:
+    metadata:
+      labels:
+        app: web-sockets-be
+    spec:
+      containers:
+        - name: web-sockets-be
+          image: web-sockets-be:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8003
+              protocol: TCP
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /usr/src/app/apps/web-sockets-be/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: zakaat-secret
+            items:
+              - key: .env
+                path: .env
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webrtc-signalling-be
+  labels:
+    app: webrtc-signalling-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webrtc-signalling-be
+  template:
+    metadata:
+      labels:
+        app: webrtc-signalling-be
+    spec:
+      containers:
+        - name: webrtc-signalling-be
+          image: webrtc-signalling-be:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8002
+              protocol: TCP
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /usr/src/app/apps/webrtc-signalling-be/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: zakaat-secret
+            items:
+              - key: .env
+                path: .env
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-be
+  labels:
+    app: worker-be
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: worker-be
+  template:
+    metadata:
+      labels:
+        app: worker-be
+    spec:
+      containers:
+        - name: worker-be
+          image: worker-be:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /usr/src/app/apps/worker-be/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: zakaat-secret
+            items:
+              - key: .env
+                path: .env
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-face-verification-be
+  labels:
+    app: fastapi-face-verification-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-face-verification-be
+  template:
+    metadata:
+      labels:
+        app: fastapi-face-verification-be
+    spec:
+      containers:
+        - name: fastapi-face-verification-be
+          image: fastapi-face-verification-be:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /usr/src/app/apps/fastapi-face-verification-be/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: zakaat-secret
+            items:
+              - key: .env
+                path: .env

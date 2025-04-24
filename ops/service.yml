@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextjs-web-app
+  labels:
+    app: nextjs-web-app
+spec:
+  selector:
+    app: nextjs-web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: razorpay-payments-be
+  labels:
+    app: razorpay-payments-be
+spec:
+  selector:
+    app: razorpay-payments-be
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8001
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webrtc-signalling-be
+  labels:
+    app: webrtc-signalling-be
+spec:
+  selector:
+    app: webrtc-signalling-be
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8002
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-face-verification-be
+  labels:
+    app: fastapi-face-verification-be
+spec:
+  selector:
+    app: fastapi-face-verification-be
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-sockets-be
+  labels:
+    app: web-sockets-be
+spec:
+  selector:
+    app: web-sockets-be
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8003
+  type: ClusterIP
