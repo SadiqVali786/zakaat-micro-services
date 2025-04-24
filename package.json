@@ -31,7 +31,10 @@
     "start:web-sockets-be": "cd apps/web-sockets-be && bun run start",
     "start:webrtc-signaling-be": "cd apps/webrtc-signaling-be && bun run start",
     "start:worker-be": "cd apps/worker-be && bun run start",
-    "prepare": "husky"
+    "prepare": "husky",
+    "studio": "turbo run db:studio",
+    "push": "turbo run db:push",
+    "generate": "turbo run db:generate"
   },
   "workspaces": [
     "apps/*",
