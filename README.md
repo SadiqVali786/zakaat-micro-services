@@ -134,7 +134,6 @@ Detailed documentation for each service is available in their respective directo
 - `/apps/fastapi-face-verification-be/README.md`
 - `/apps/webrtc-signalling-be/README.md`
 - `/apps/web-sockets-be/README.md`
-- `/apps/api-gateway/README.md`
 - `/apps/worker-be/README.md`
 - `/apps/razorpay-payments-be/README.md`
 - `/apps/react-native-expo-app/README.md`
