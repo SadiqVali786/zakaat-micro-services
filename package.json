@@ -1,5 +1,22 @@
 {
   "name": "zakaat-micro-services",
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-only-warn": "^1.1.0",
+    "eslint-plugin-turbo": "^2.5.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.4.4",
+    "typescript-eslint": "^8.31.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.5",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -13,17 +30,9 @@
     "start:razorpay-payments-be": "cd apps/razorpay-payments-be && bun run start",
     "start:web-sockets-be": "cd apps/web-sockets-be && bun run start",
     "start:webrtc-signaling-be": "cd apps/webrtc-signaling-be && bun run start",
-    "start:worker-be": "cd apps/worker-be && bun run start"
+    "start:worker-be": "cd apps/worker-be && bun run start",
+    "prepare": "husky"
   },
-  "devDependencies": {
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "turbo": "^2.4.4"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "bun@1.2.5",
   "workspaces": [
     "apps/*",
     "packages/*"

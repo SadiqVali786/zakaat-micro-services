@@ -39,13 +39,27 @@
     "WEB_SOCKETS_BE_PORT",
     "WEB_RTC_SIGNALLING_BE_PORT",
     "RAZORPAY_PAYMENTS_BE_PORT",
-    "FASTAPI_FACE_VERIFICATION_BE_PORT"
+    "FASTAPI_FACE_VERIFICATION_BE_PORT",
+    "RAZORPAY_WEBHOOK_SECRET",
+    "ALLOWED_ORIGINS",
+    "REDIS_URL",
+    "AUTH_GITHUB_ID",
+    "AUTH_GITHUB_SECRET",
+    "NODE_ENV",
+    "API_GATEWAY_PORT",
+    "NEXTJS_WEB_APP_PORT",
+    "NEXT_PUBLIC_BASE_URL",
+    "NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL",
+    "NEXT_PUBLIC_RAZORPAY_PAYMENTS_BE_URL",
+    "NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL",
+    "NEXT_PUBLIC_WEB_SOCKETS_BE_URL",
+    "SAFE_ACTIONS_STATE_ROUTE",
+    "EMAIL_HOST",
+    "EMAIL_PORT",
+    "EMAIL_USER",
+    "EMAIL_PASSWORD",
+    "CLOUDINARY_API_KEY",
+    "CLOUDINARY_API_SECRET"
   ],
-  "globalDependencies": [
-    "**/.env.*local",
-    "**/.env",
-    ".env",
-    ".env.local",
-    "tsconfig.json"
-  ]
+  "globalDependencies": ["**/.env.*local", "**/.env", ".env", ".env.local", "tsconfig.json"]
 }
