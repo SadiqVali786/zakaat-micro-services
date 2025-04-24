@@ -1,0 +1,20 @@
+FROM oven/bun:1
+
+WORKDIR /usr/src/app
+
+COPY ./package.json ./package.json
+COPY ./bun.lock ./bun.lock
+COPY ./turbo.json ./turbo.json
+COPY ./apps/webrtc-signaling-be/package.json ./apps/webrtc-signaling-be/package.json
+COPY ./packages/common/package.json ./packages/common/package.json
+
+RUN bun install
+
+COPY ./apps/webrtc-signaling-be/ ./apps/webrtc-signaling-be/
+COPY ./packages/common/ ./packages/common/
+
+ENV NODE_ENV=PRODUCTION
+
+EXPOSE 8002
+
+CMD ["bun", "run", "start:webrtc-signaling-be"]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "conda run -p .venv/ --no-capture-output uvicorn main:app --reload",
-    "start": "uvicorn main:app",
+    "start": "uvicorn main:app --host 0.0.0.0 --port 8000",
     "build": "echo 'No build step for FastAPI in package.json'",
     "test": "echo 'No tests specified'",
     "check-types": "mypy .",

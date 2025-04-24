@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 import tensorflow as tf
 from src.logger import logging
+import uvicorn
 
 # Configure TensorFlow to be less verbose and only use CPU
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF logging
@@ -85,4 +86,7 @@ async def encode_face(file: UploadFile):
             detail=f"An unexpected error occurred: {str(e)}"
         )
 
-logging.info(f"Server started successfully @ http://{HOST}:{PORT}")
+logging.info(f"Server started successfully @ http://localhost:{PORT}")
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=PORT)

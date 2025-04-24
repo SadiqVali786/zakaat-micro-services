@@ -1,0 +1,16 @@
+node_modules
+.next
+.turbo
+.env
+
+Dockerfile
+.dockerignore
+.git
+.gitignore
+.gitmodules
+
+npm-debug.log
+notebooks
+README.md
+
+requirements-manual.txt

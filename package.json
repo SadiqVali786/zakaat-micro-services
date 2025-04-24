@@ -7,7 +7,13 @@
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "find . -type d \\( -name \"generated\" -o -name \"node_modules\" -o -name \"dist\" -o -name \".next\" -o -name \".turbo\" -o -name \".expo\" \\) -prune -exec rm -rf {} +"
+    "clean": "find . -type d \\( -name \"generated\" -o -name \"node_modules\" -o -name \"dist\" -o -name \".next\" -o -name \".turbo\" -o -name \".expo\" \\) -prune -exec rm -rf {} +",
+    "start:fastapi-face-verification-be": "cd apps/fastapi-face-verification-be && bun run start",
+    "start:nextjs-web-app": "cd apps/nextjs-web-app && bun run start",
+    "start:razorpay-payments-be": "cd apps/razorpay-payments-be && bun run start",
+    "start:web-sockets-be": "cd apps/web-sockets-be && bun run start",
+    "start:webrtc-signaling-be": "cd apps/webrtc-signaling-be && bun run start",
+    "start:worker-be": "cd apps/worker-be && bun run start"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

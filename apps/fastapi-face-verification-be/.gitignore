@@ -173,3 +173,4 @@ cython_debug/
 # Environment
 fastapi-face-verification-be/
 artifacts/
+logs

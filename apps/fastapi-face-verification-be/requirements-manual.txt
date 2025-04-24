@@ -1,0 +1,11 @@
+numpy
+fastapi
+uvicorn
+opencv-python-headless
+deepface
+tf-keras
+faiss-cpu
+python-dotenv
+python-multipart
+absl-py
+-e .
