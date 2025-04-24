@@ -1,47 +1,148 @@
-# Zakaat Mobile(Android, iOS) & Web App
+# Zakaat Distribution Platform - A Full-Stack Microservices Architecture
 
-## Description
+## 🚀 Project Overview
 
-A Zakaat distribution web app that connects donors with verified, deserving individuals in their locality and among relatives who may hesitate to ask for help. Using AI to prevent fraud, the platform ensures Zakaat reaches those truly in need. Donors can support friends or relatives if they’re registered, while applicants can stay anonymous or share details to build trust.
+A sophisticated Zakaat distribution platform that leverages cutting-edge technology to connect donors with verified beneficiaries. Built with a microservices architecture, this platform ensures secure, efficient, and transparent Zakaat distribution while maintaining the highest standards of privacy and security.
 
-### Figma UI/UX Design Live Link
+### 🎨 UI/UX Design
 
-<https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=80-18620&t=n6i2BK4lvv9QF8oc-1>
+- **Figma Design:** [View Design](https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=80-18620&t=n6i2BK4lvv9QF8oc-1)
+- **Design Philosophy:** Created with a focus on accessibility, user experience, and modern design principles
+- **Responsive Design:** Seamless experience across web and mobile platforms
 
-### Landing Page Sneak Peak
+### 📱 Platform Preview
 
 ![Zakaat App Details](apps/nextjs-web-app/public/images/git-display.png)
 
-## Techologies Used
+## 🛠️ Technical Architecture
 
-1. **Web-App:** Next.js 15, Typescript, Tailwindcss
-1. **Mobile-App(Android, iOS):** React Native Expo
-1. **Computer Vision AI:** Siamese Network for Fraud Detection via Face Verification (98.56% accurate)
-1. **NLP & Gen AI:** For Text Summarization
-1. **UI/UX Design:** Figma
-1. **Database:** Prisma ORM, MongoDB
-1. **Authentication:** NextAuth's Google Authentication
-1. **Contanerization:** Docker
-1. **Proximity Search:** Native MongoDB spherical $geoNear location API with pipeline
-1. **Deployment:** Kubernetes
-1. **Chatting:** Web-Sockets
-1. **Audio & Video Calls:** Web-RTC
-1. **Miscelleneous:** useActionState, useOptimistic, revalidatePath, Server Components within a Client Components, Semantic Tags, Query Parameters instead of useState, Modular Components & Code
-1. **Component Libraries:** Shadcn, Aceternity, MagicUI
-1. **Cloud-based Media Management Platform:** Cloudinary
-1. **Frontend State Management:** Zustand
+### Frontend Stack
 
-## Features in this Application
+- **Web Application:** Next.js 15 with TypeScript
+- **Mobile Application:** React Native Expo
+- **Styling:** Tailwind CSS + Shadcn UI Components
+- **State Management:** Zustand for efficient client-side state management
+- **Form Handling:** Multi-step forms with Zod validation
+- **Real-time Features:** WebSocket integration for instant messaging
 
-1. ⏱️ Realtime Chatting between Donors and Applicants
-2. 🟢 Realtime Video Calls between Donors and Applicants
-3. 🤑 Fraud Zakaat Application Elimination with Face Verification
-4. 🚨 Fetching Applications Geographically nearest to the donors by using GPS coordinates
-5. 🔐 Custom Authentication
-6. 📚 Websockets
-7. 📣 Optimistic UI
-8. 📱 Responsive design
-9. 👾 Deployment
-10. 👨‍👨‍👧‍👦 Real-time Collaboration
-11. 🤯 Suggesting Zakaat Applications to fellow donors in your Network
-12. 😜 Bookmarking Applications
+### Backend Services
+
+- **Face Verification:** FastAPI backend with Siamese Network (98.56% accuracy)
+- **WebRTC Signaling:** Custom signaling server for video calls
+- **WebSocket Server:** Real-time communication hub
+- **Payment Processing:** Razorpay integration with webhook support
+- **Worker Service:** Background job processing
+- **Authentication:** NextAuth with OAuth providers
+
+### Data Layer
+
+- **Database:** MongoDB Atlas
+- **ORM:** Prisma
+- **Caching:** Redis for pub/sub and caching
+- **Proximity Search:** Native MongoDB Atlas proximity search
+- **Vector Search:** Face embedding similarity search
+
+### DevOps & Infrastructure
+
+- **Containerization:** Docker
+- **Orchestration:** Kubernetes
+- **Package Management:** Bun
+- **Development:** Turbo Repo monorepo
+- **CI/CD:** Automated deployment pipelines
+
+## 🌟 Key Features
+
+### Security & Verification
+
+- 🔒 Face Verification System (98.56% accuracy)
+- 🔍 Fraud Detection with AI
+- 🔐 Secure Authentication
+- 🛡️ End-to-end encryption for sensitive data
+
+### Communication
+
+- 💬 Real-time chat (WhatsApp-like interface)
+- 📹 Video calls (Omegle-like experience)
+- 🔔 Push notifications
+- 📧 Email notifications with React Email
+
+### Payment & Transactions
+
+- 💳 UPI instant payments
+- 🔄 Automated payment processing
+- 📊 Transaction tracking
+- 🏦 International payment support (coming soon)
+
+### User Experience
+
+- 📱 Responsive design
+- 🔄 Optimistic UI updates
+- 📜 Infinite scrolling with pagination
+- 🗺️ Proximity-based search
+- 📝 Twitter-like text tweeting
+- 🔖 Application bookmarking
+
+## 🚀 Future Roadmap
+
+### Phase 1: Global Expansion
+
+- 🌍 International payment integration
+- 💱 Multi-currency support
+- 🌐 Global beneficiary network
+
+### Phase 2: Mobile Enhancement
+
+- 📱 React Native Expo app
+- 🔄 Offline support
+- 📱 Native features integration
+
+### Phase 3: AI & ML Enhancement
+
+- 🎯 Voice analysis for fraud detection
+- 📹 Video analysis for fraud detection
+- 🗣️ Voice-to-text integration
+- 🤖 AI-powered matching system
+
+### Phase 4: Backend Evolution
+
+- ⚡ tRPC implementation
+- 🦫 Go Lang microservices
+- 🔄 Real-time analytics
+- 📊 Advanced reporting
+
+## 🛠️ Development Setup
+
+```bash
+# Install dependencies
+bun install
+
+# Start development servers
+bun run dev
+
+# Build for production
+bun run build
+
+# Run tests
+bun run test
+```
+
+## 📚 Documentation
+
+Detailed documentation for each service is available in their respective directories:
+
+- `/apps/nextjs-web-app/README.md`
+- `/apps/fastapi-face-verification-be/README.md`
+- `/apps/webrtc-signalling-be/README.md`
+- `/apps/web-sockets-be/README.md`
+- `/apps/api-gateway/README.md`
+- `/apps/worker-be/README.md`
+- `/apps/razorpay-payments-be/README.md`
+- `/apps/react-native-expo-app/README.md`
+
+## 🤝 Contributing
+
+We welcome contributions! Please read our contributing guidelines before submitting pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
