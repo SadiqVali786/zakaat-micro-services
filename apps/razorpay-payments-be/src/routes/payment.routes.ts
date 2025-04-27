@@ -1,14 +1,9 @@
 import express, { type Request, type Response } from "express";
 import { authMiddleware } from "../middleware";
-import {
-  createUPIPaymentLink,
-  verifyPaymentWebhook,
-} from "../services/payment.service";
+import { createUPIPaymentLink, verifyPaymentWebhook } from "../services/payment.service";
 import { Logger } from "@repo/common/logger";
 import { NODE_ENV } from "../env";
-import { DEVELOPMENT } from "@repo/common/constants";
 import { PaymentStatus, prisma } from "@repo/mongodb";
-import { razorpay } from "../config/razorpay.instance";
 
 const logger = new Logger();
 const paymentRoutes = express.Router();
@@ -30,45 +25,41 @@ function mapRazorpayStatus(razorpayStatus: string): PaymentStatus {
 }
 
 // Route to create UPI payment link
-paymentRoutes.post(
-  "/upi/create-link",
-  authMiddleware,
-  async (req: Request, res: Response) => {
-    try {
-      const { applicantId, amount, upiId } = req.body;
+paymentRoutes.post("/upi/create-link", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const { applicantId, amount, upiId } = req.body;
 
-      logger.info(
-        `Creating payment link for applicant ${applicantId} with amount ${amount} and UPI ID ${upiId}`
-      );
+    logger.info(
+      `Creating payment link for applicant ${applicantId} with amount ${amount} and UPI ID ${upiId}`
+    );
 
-      if (!upiId || !amount || !applicantId) {
-        res.status(400).json({ msg: "Missing required parameters" });
-        return;
-      }
-
-      const reference = `${Date.now()}_${req.user.id}`;
-
-      const paymentLink = await createUPIPaymentLink({
-        amount,
-        upiId,
-        donorId: req.user.id,
-        applicantId,
-        reference,
-      });
-
-      res.status(201).json(paymentLink);
-    } catch (error) {
-      const ErrorMsg = "Payment link creation error";
-      if (NODE_ENV === DEVELOPMENT) {
-        logger.error(ErrorMsg, error);
-      }
-      res.status(500).json({
-        msg: ErrorMsg,
-        details: error instanceof Error ? error.message : "Unknown error",
-      });
+    if (!upiId || !amount || !applicantId) {
+      res.status(400).json({ msg: "Missing required parameters" });
+      return;
     }
+
+    const reference = `${Date.now()}_${req.user.id}`;
+
+    const paymentLink = await createUPIPaymentLink({
+      amount,
+      upiId,
+      donorId: req.user.id,
+      applicantId,
+      reference
+    });
+
+    res.status(201).json(paymentLink);
+  } catch (error) {
+    const ErrorMsg = "Payment link creation error";
+    if (NODE_ENV === "development") {
+      logger.error(ErrorMsg, error);
+    }
+    res.status(500).json({
+      msg: ErrorMsg,
+      details: error instanceof Error ? error.message : "Unknown error"
+    });
   }
-);
+});
 
 // Webhook route to handle payment status updates
 paymentRoutes.post("/razorpay/webhook", async (req: Request, res: Response) => {
@@ -99,8 +90,8 @@ paymentRoutes.post("/razorpay/webhook", async (req: Request, res: Response) => {
         where: { paymentLinkId },
         data: {
           status,
-          updatedAt: new Date(),
-        },
+          updatedAt: new Date()
+        }
       });
     }
 

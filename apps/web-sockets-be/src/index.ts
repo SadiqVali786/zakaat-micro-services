@@ -1,16 +1,13 @@
 import { createServer, IncomingMessage } from "http";
 import WebSocket, { WebSocketServer } from "ws";
 import { PORT, REDIS_MSG_QUEUE_KEY } from "./env";
+import { printEnvironmentVariables } from "@repo/common/print-env-variables";
 import { PubSubManager } from "./pubsub-manager";
 import { UserManager } from "./user-manager";
 import { RoomManager } from "./room-manager";
 import { redisPublisher, redisQueue, redisSubscriber } from "@repo/redis";
 import { authenticate } from "@repo/common/auth-service";
-import type {
-  Client,
-  ExtendedWebSocket,
-  WebSocketsServerMessages,
-} from "@repo/common/types";
+import type { Client, ExtendedWebSocket, WebSocketsServerMessages } from "@repo/common/types";
 import { Logger } from "@repo/common/logger";
 import {
   ChatMessageSchema,
@@ -18,15 +15,17 @@ import {
   ChatMessageSeenSchema,
   CreateRoomMessageSchema,
   JoinRoomsMessageSchema,
-  UserTypingMessageSchema,
+  UserTypingMessageSchema
 } from "@repo/common/validators";
 import {
   DifferentMessageStatus,
   DifferentRoomMessages,
   UserActivity,
   UserRole,
-  UserStatus,
+  UserStatus
 } from "@repo/common/types";
+
+printEnvironmentVariables();
 
 const server = createServer();
 const wss = new WebSocketServer({ noServer: true });
@@ -35,10 +34,7 @@ const userManager = UserManager.getInstance();
 const roomManager = RoomManager.getInstance();
 const logger = new Logger();
 
-const messageHandler = async (
-  message: WebSocketsServerMessages,
-  ws: ExtendedWebSocket
-) => {
+const messageHandler = async (message: WebSocketsServerMessages, ws: ExtendedWebSocket) => {
   try {
     if (message.type === DifferentRoomMessages.JoinRooms) {
       const joinRoomsMessage = JoinRoomsMessageSchema.parse(message);
@@ -50,7 +46,7 @@ const messageHandler = async (
           roomId,
           JSON.stringify({
             type: UserStatus.Online,
-            payload: { roomId, userId: ws.userId },
+            payload: { roomId, userId: ws.userId }
           })
         );
       });
@@ -69,81 +65,71 @@ const messageHandler = async (
       userManager.addRoomToUser(ws.userId, newRoomMessage.payload.roomId);
       roomManager.addUserToRoom(newRoomMessage.payload.roomId, ws);
       pubSubManager.subscribeRoomChannel(newRoomMessage.payload.roomId);
-      redisPublisher.publish(
-        DifferentRoomMessages.CreateRoom,
-        JSON.stringify(newRoomMessage)
-      );
+      redisPublisher.publish(DifferentRoomMessages.CreateRoom, JSON.stringify(newRoomMessage));
     } else if (message.type === UserActivity.Typing) {
       const userTyping = UserTypingMessageSchema.parse(message);
-      redisPublisher.publish(
-        userTyping.payload.roomId,
-        JSON.stringify(userTyping)
-      );
+      redisPublisher.publish(userTyping.payload.roomId, JSON.stringify(userTyping));
     }
   } catch (error) {
     logger.error(`Error processing message: ${JSON.stringify(message)}`);
   }
 };
 
-wss.on(
-  "connection",
-  async (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
-    ws.userId = client.userId;
-    ws.name = client.name;
-    ws.role = client.role;
-    ws.email = client.email;
-    ws.image = client.image;
+wss.on("connection", async (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
+  ws.userId = client.userId;
+  ws.name = client.name;
+  ws.role = client.role;
+  ws.email = client.email;
+  ws.image = client.image;
 
-    userManager.addUser(ws);
-    redisQueue.lPush(
-      REDIS_MSG_QUEUE_KEY,
-      JSON.stringify({
-        type: UserStatus.Online,
-        payload: { userId: ws.userId },
-      })
-    );
+  userManager.addUser(ws);
+  redisQueue.lPush(
+    REDIS_MSG_QUEUE_KEY,
+    JSON.stringify({
+      type: UserStatus.Online,
+      payload: { userId: ws.userId }
+    })
+  );
 
-    ws.on("error", console.error);
+  ws.on("error", console.error);
 
-    ws.on("message", async (data: string | Buffer) => {
-      // TODO: add rate limitting logic here
-      console.log(`Received message ${data} from user ${ws.userId}`);
-      try {
-        await messageHandler(JSON.parse(data as string), ws);
-      } catch (error) {
-        logger.error("Error processing message: ", error);
-      }
-    });
+  ws.on("message", async (data: string | Buffer) => {
+    // TODO: add rate limitting logic here
+    console.log(`Received message ${data} from user ${ws.userId}`);
+    try {
+      await messageHandler(JSON.parse(data as string), ws);
+    } catch (error) {
+      logger.error("Error processing message: ", error);
+    }
+  });
 
-    ws.on("close", () => {
-      try {
-        redisQueue.lPush(
-          REDIS_MSG_QUEUE_KEY,
+  ws.on("close", () => {
+    try {
+      redisQueue.lPush(
+        REDIS_MSG_QUEUE_KEY,
+        JSON.stringify({
+          type: UserStatus.Offline,
+          payload: { userId: ws.userId }
+        })
+      );
+      const rooms = userManager.getRooms(ws.userId);
+      rooms?.forEach((roomId) => {
+        roomManager.removeUserFromRoom(roomId, ws.userId);
+        if (roomManager.length(roomId) === 0) pubSubManager.unsubscribeRoomChannel(roomId);
+        redisPublisher.publish(
+          roomId,
           JSON.stringify({
             type: UserStatus.Offline,
-            payload: { userId: ws.userId },
+            payload: { userId: ws.userId, roomId }
           })
         );
-        const rooms = userManager.getRooms(ws.userId);
-        rooms?.forEach((roomId) => {
-          roomManager.removeUserFromRoom(roomId, ws.userId);
-          if (roomManager.length(roomId) === 0)
-            pubSubManager.unsubscribeRoomChannel(roomId);
-          redisPublisher.publish(
-            roomId,
-            JSON.stringify({
-              type: UserStatus.Offline,
-              payload: { userId: ws.userId, roomId },
-            })
-          );
-        });
-        logger.info(`WebSocket connection closed for user ${ws.userId}`);
-      } catch (err) {
-        logger.error("WebSocket connection Closing time error: ", err);
-      }
-    });
-  }
-);
+      });
+      logger.info(`WebSocket connection closed for user ${ws.userId}`);
+    } catch (err) {
+      logger.error("WebSocket connection Closing time error: ", err);
+    }
+  });
+});
 
 redisSubscriber.subscribe(DifferentRoomMessages.CreateRoom, (msg) => {
   try {
@@ -172,9 +158,9 @@ redisSubscriber.subscribe(DifferentRoomMessages.CreateRoom, (msg) => {
           participant: {
             id: createRoomMessage.payload.donorId,
             isOnline: true,
-            isTyping: false,
-          },
-        },
+            isTyping: false
+          }
+        }
       })
     );
     console.log("STEP 5", applicant);

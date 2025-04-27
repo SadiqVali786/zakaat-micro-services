@@ -21,7 +21,7 @@ COPY ./packages/mongodb/ ./packages/mongodb/
 COPY ./packages/redis/ ./packages/redis/
 COPY ./packages/zustand/ ./packages/zustand/
 
-ENV NODE_ENV=PRODUCTION
+ENV NODE_ENV=development
 
 RUN bun run db:generate
 RUN DATABASE_URL=${DATABASE_URL} bun run build

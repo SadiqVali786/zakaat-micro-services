@@ -26,12 +26,17 @@ export const FetchTweets = async (args?: z.infer<typeof FetchTweetsSchema>) => {
   return tweets.length ? { data: tweets } : { error: "No tweets found" };
 };
 
-export const SafeFetchTweets = createSafeAction(
-  FetchTweets,
-  FetchTweetsSchema,
-  [UserRole.DONOR],
-  true
-);
+export const SafeFetchTweets = createSafeAction({
+  action: {
+    withInputs: true,
+    handler: FetchTweets,
+    schema: FetchTweetsSchema
+  },
+  actionType: {
+    allowedRoles: [UserRole.DONOR],
+    isPrivate: true
+  }
+});
 
 // Create Tweet given text
 export const CreateTweet = async (text: string) => {
@@ -64,9 +69,14 @@ const FetchFollowingTweetsSchema = z.object({
   page: z.number().optional()
 });
 
-export const SafeFetchFollowingTweets = createSafeAction(
-  FetchFollowingTweets,
-  FetchFollowingTweetsSchema,
-  [UserRole.DONOR],
-  true
-);
+export const SafeFetchFollowingTweets = createSafeAction({
+  action: {
+    withInputs: true,
+    handler: FetchFollowingTweets,
+    schema: FetchFollowingTweetsSchema
+  },
+  actionType: {
+    allowedRoles: [UserRole.DONOR],
+    isPrivate: true
+  }
+});

@@ -9,7 +9,7 @@ import { Toaster as ReactHotToaster } from "react-hot-toast";
 import { InitWebRTCConnection } from "@/components/hook-components/init-webrtc-connection";
 import { InitWebSocketsConnection } from "@/components/hook-components/init-web-sockets-connection";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
-
+import { printEnvironmentVariables } from "@repo/common/print-env-variables";
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,6 +22,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  printEnvironmentVariables();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body

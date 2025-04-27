@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENV ENV=PRODUCTION
+ENV ENV=development
 EXPOSE 8000
 
 CMD python main.py

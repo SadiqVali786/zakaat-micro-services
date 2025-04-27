@@ -36,7 +36,7 @@ export const initiateVideoCall = async (
     store.setCallerInfo({
       id: applicantId,
       name: applicantName,
-      image: "https://res.cloudinary.com/dud648ixu/image/upload/v1744800612/charan_q5w2zy.png" // applicantImage
+      image: "https://res.cloudinary.com/dud648ixu/image/upload/v1744800612/charan_q5w2zy.png" // TODO: applicantImage
     });
   } catch (error) {
     console.error("Failed to initiate call:", error);

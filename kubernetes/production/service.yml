@@ -21,7 +21,7 @@ metadata:
     app: razorpay-payments-be
 spec:
   selector:
-    app: razorpay-payments-be
+    app: razorpay-payments-be 
   ports:
     - protocol: TCP
       port: 80

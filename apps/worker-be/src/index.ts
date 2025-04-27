@@ -4,7 +4,7 @@ import {
   type WorkerMessages,
   UserActivity,
   UserStatus,
-  DifferentMessageStatus,
+  DifferentMessageStatus
 } from "@repo/common/types";
 import {
   ChatMessageSchema,
@@ -12,13 +12,13 @@ import {
   ChatMessageSeenSchema,
   UserOfflineSchema,
   UserOnlineSchema,
-  UserOnboardingSchema,
+  UserOnboardingSchema
 } from "@repo/common/validators";
 import { Logger } from "@repo/common/logger";
 import { prisma } from "@repo/mongodb";
 import { MessageStatus } from "@repo/mongodb";
-import { DEVELOPMENT } from "@repo/common/constants";
 import { sendOnboardingEmail } from "@repo/notifications";
+import { printEnvironmentVariables } from "@repo/common/print-env-variables";
 
 let message: {
   key: string;
@@ -26,8 +26,10 @@ let message: {
 } | null;
 const logger = new Logger();
 
+printEnvironmentVariables();
+
 const messageHandler = async (data: WorkerMessages) => {
-  if (NODE_ENV === DEVELOPMENT) {
+  if (NODE_ENV === "development") {
     logger.info("POPPED message: ", data);
   }
   try {
@@ -38,12 +40,12 @@ const messageHandler = async (data: WorkerMessages) => {
           content: chatMessage.payload.content,
           senderId: chatMessage.payload.senderId,
           roomId: chatMessage.payload.roomId,
-          sentAt: new Date(),
-        },
+          sentAt: new Date()
+        }
       });
       await prisma.user.update({
         where: { id: chatMessage.payload.senderId },
-        data: { lastSeen: new Date() },
+        data: { lastSeen: new Date() }
       });
       redisPublisher.publish(
         chatMessage.payload.roomId,
@@ -52,8 +54,8 @@ const messageHandler = async (data: WorkerMessages) => {
           payload: {
             ...chatMessage.payload,
             messageId: response.id,
-            sentAt: response.sentAt,
-          },
+            sentAt: response.sentAt
+          }
         })
       );
       logger.info("Published message to the redis Pub-Sub");
@@ -62,14 +64,14 @@ const messageHandler = async (data: WorkerMessages) => {
       await prisma.message.update({
         where: { id: chatMessageReceived.payload.messageId },
         data: {
-          status: chatMessageReceived.type as unknown as MessageStatus,
-        },
+          status: chatMessageReceived.type as unknown as MessageStatus
+        }
       });
       await prisma.user.update({
         where: { id: chatMessageReceived.payload.senderId },
-        data: { lastSeen: new Date() },
+        data: { lastSeen: new Date() }
       });
-      if (NODE_ENV === DEVELOPMENT) {
+      if (NODE_ENV === "development") {
         logger.info("Updated message status in the DB");
       }
     } else if (data.type === DifferentMessageStatus.Seen) {
@@ -78,36 +80,36 @@ const messageHandler = async (data: WorkerMessages) => {
         where: {
           roomId: chatMessageSeen.payload.roomId,
           senderId: chatMessageSeen.payload.senderId,
-          status: { not: MessageStatus.SEEN },
+          status: { not: MessageStatus.SEEN }
         },
-        data: { status: MessageStatus.SEEN },
+        data: { status: MessageStatus.SEEN }
       });
       redisPublisher.publish(
         chatMessageSeen.payload.roomId,
         JSON.stringify({
           type: chatMessageSeen.type,
-          payload: chatMessageSeen.payload,
+          payload: chatMessageSeen.payload
         })
       );
-      if (NODE_ENV === DEVELOPMENT) {
+      if (NODE_ENV === "development") {
         logger.info("Updated message status in the DB");
       }
     } else if (data.type === UserStatus.Offline) {
       const userOffline = UserOfflineSchema.parse(data);
       await prisma.user.update({
         where: { id: userOffline.payload.userId },
-        data: { lastSeen: new Date(), isOnline: false },
+        data: { lastSeen: new Date(), isOnline: false }
       });
-      if (NODE_ENV === DEVELOPMENT) {
+      if (NODE_ENV === "development") {
         logger.info("Updated user last seen in the DB");
       }
     } else if (data.type === UserStatus.Online) {
       const userOnline = UserOnlineSchema.parse(data);
       await prisma.user.update({
         where: { id: userOnline.payload.userId },
-        data: { lastSeen: new Date(), isOnline: true },
+        data: { lastSeen: new Date(), isOnline: true }
       });
-      if (NODE_ENV === DEVELOPMENT) {
+      if (NODE_ENV === "development") {
         logger.info("Updated user last seen in the DB");
       }
     } else if (data.type === UserActivity.OnboardingEmail) {
@@ -118,7 +120,7 @@ const messageHandler = async (data: WorkerMessages) => {
         userOnboarding.payload.donorName
       );
       logger.info("Sent onboarding email", res);
-      if (NODE_ENV === DEVELOPMENT) {
+      if (NODE_ENV === "development") {
         logger.info("Sent onboarding email");
       }
     }
@@ -136,7 +138,7 @@ const processMessages = async () => {
         await messageHandler(data);
       }
     } catch (error) {
-      if (NODE_ENV === DEVELOPMENT) {
+      if (NODE_ENV === "development") {
         logger.error("Error storing the message to DB", error);
       }
       if (message?.element) {

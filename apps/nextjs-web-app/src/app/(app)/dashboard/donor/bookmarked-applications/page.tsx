@@ -5,7 +5,7 @@ import { ZakaatApplication } from "../../_components/zakaat-application";
 const DonorBookmarkedApplicationsPage = async () => {
   const session = await auth();
   const donations = await prisma.application.findMany({
-    where: { donorUserId: session?.user.id },
+    where: { bookmarkedUserId: session?.user.id },
     include: { verifier: true, author: true }
   });
 
@@ -15,6 +15,7 @@ const DonorBookmarkedApplicationsPage = async () => {
         <div key={donation.id} className="min-h-[150vh]">
           <ZakaatApplication
             reason={donation.reason}
+            upiId={donation.author.upiId!}
             name={donation.verifier?.name ?? ""}
             amount={donation.amount}
             rank={donation.rating}

@@ -19,6 +19,6 @@ COPY ./packages/notifications/ ./packages/notifications/
 COPY ./packages/redis/ ./packages/redis/
 COPY ./packages/mongodb/ ./packages/mongodb/
 
-ENV NODE_ENV=PRODUCTION
+ENV NODE_ENV=development
 
 CMD ["bun", "run", "start:worker-be"]

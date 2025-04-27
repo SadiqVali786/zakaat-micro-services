@@ -20,7 +20,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "docker start zakaat-redis && turbo run dev --filter '!@repo/notifications' --filter '!api-gateway'",
+    "dev": "docker start zakaat-redis && turbo run dev",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

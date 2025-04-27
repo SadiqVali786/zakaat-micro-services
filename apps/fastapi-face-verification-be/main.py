@@ -8,15 +8,27 @@ import tensorflow as tf
 from src.logger import logging
 import uvicorn
 
+
+def print_environment_variables():
+    """
+    Print all environment variables in a formatted way
+    """
+    logging.info("\nEnvironment Variables:")
+    logging.info("=====================")
+    for key, value in os.environ.items():
+        logging.info(f"{key}: {value}")
+    logging.info("=====================\n")
+
+
 # Configure TensorFlow to be less verbose and only use CPU
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF logging
 tf.config.set_visible_devices([], 'GPU')  # Disable GPU
 
 load_dotenv()
 PORT = int(os.getenv("FASTAPI_FACE_VERIFICATION_BE_PORT", "8000"))
-ENV = os.getenv("ENV", "DEVELOPMENT")
+ENV = os.getenv("ENV", "development")
 
-HOST = "127.0.0.1" if ENV == "DEVELOPMENT" else "0.0.0.0"
+HOST = "127.0.0.1" if ENV == "development" else "0.0.0.0"
 
 app = FastAPI(
     title="Face Encoding API",
@@ -86,7 +98,9 @@ async def encode_face(file: UploadFile):
             detail=f"An unexpected error occurred: {str(e)}"
         )
 
+# Print environment variables during startup
 logging.info(f"Server started successfully @ http://localhost:{PORT}")
+print_environment_variables()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=PORT)

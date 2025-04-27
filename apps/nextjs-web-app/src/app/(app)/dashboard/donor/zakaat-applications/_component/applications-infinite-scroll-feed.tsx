@@ -66,6 +66,7 @@ export const ApplicationsInfiniteScrollFeed = () => {
       {applications.map((application) => (
         <ZakaatApplication
           key={application.id}
+          upiId={application.author.upiId}
           reason={application.reason}
           name={application.verifier.name}
           amount={application.amount}

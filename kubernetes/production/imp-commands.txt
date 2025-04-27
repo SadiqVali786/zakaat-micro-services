@@ -1,0 +1,8 @@
+eksctl delete cluster --name <cluster-name> --region <region>
+
+kubectl create secret generic my-secret \
+  --from-env-file=.env \
+  --dry-run=client -o yaml > secret.yml
+
+# to install kubeseal locally
+https://github.com/bitnami-labs/sealed-secrets?tab=readme-ov-file#installation

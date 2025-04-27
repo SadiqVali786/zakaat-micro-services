@@ -3,16 +3,10 @@ import { verifyJWT } from "@repo/common/auth-service";
 import type { NextFunction, Request, Response } from "express";
 import { JOSEError } from "jose/errors";
 import { type TokenPayloadType } from "@repo/common/types";
-import { NODE_ENV } from "./env";
-import { DEVELOPMENT } from "@repo/common/constants";
 
 const logger = new Logger();
 
-export async function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     const authHeader = req.headers["authorization"];
     logger.info(`Auth Header: ${authHeader}`);
@@ -36,13 +30,13 @@ export async function authMiddleware(
     if (error instanceof JOSEError) {
       res.status(403).json({
         msg: "Invalid token",
-        details: NODE_ENV === DEVELOPMENT ? error.message : undefined,
+        details: process.env.NODE_ENV === "development" ? error.message : undefined
       });
       return;
     }
     res.status(500).json({
       msg: "Error proceessing authentication",
-      details: NODE_ENV === DEVELOPMENT ? (error as Error).message : undefined,
+      details: process.env.NODE_ENV === "development" ? (error as Error).message : undefined
     });
   }
 }

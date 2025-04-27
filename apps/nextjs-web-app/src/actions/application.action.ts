@@ -95,12 +95,17 @@ export const fetchApplicationsHandler = async (args?: z.infer<typeof fetchApplic
   return { data: result };
 };
 
-export const SafeServerAction = createSafeAction(
-  fetchApplicationsHandler,
-  fetchApplicationsSchema,
-  [UserRole.DONOR],
-  true
-);
+export const SafeServerAction = createSafeAction({
+  action: {
+    withInputs: true,
+    handler: fetchApplicationsHandler,
+    schema: fetchApplicationsSchema
+  },
+  actionType: {
+    allowedRoles: [UserRole.DONOR],
+    isPrivate: true
+  }
+});
 
 // Fetch Bookmarked Applications
 export const FetchBookmarkedApplications = async () => {

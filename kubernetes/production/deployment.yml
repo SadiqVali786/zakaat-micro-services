@@ -20,10 +20,18 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-              protocol: TCP
           volumeMounts:
             - name: secret-volume
               mountPath: /usr/src/app/apps/nextjs-web-app/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/mongodb/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/redis/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/common/.env
               subPath: .env
       imagePullSecrets:
         - name: regcred
@@ -62,6 +70,12 @@ spec:
             - name: secret-volume
               mountPath: /usr/src/app/apps/razorpay-payments-be/.env
               subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/mongodb/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/common/.env
+              subPath: .env
       imagePullSecrets:
         - name: regcred
       volumes:
@@ -98,6 +112,12 @@ spec:
           volumeMounts:
             - name: secret-volume
               mountPath: /usr/src/app/apps/web-sockets-be/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/redis/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/common/.env
               subPath: .env
       imagePullSecrets:
         - name: regcred
@@ -136,6 +156,9 @@ spec:
             - name: secret-volume
               mountPath: /usr/src/app/apps/webrtc-signalling-be/.env
               subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/common/.env
+              subPath: .env
       imagePullSecrets:
         - name: regcred
       volumes:
@@ -169,6 +192,18 @@ spec:
           volumeMounts:
             - name: secret-volume
               mountPath: /usr/src/app/apps/worker-be/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/mongodb/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/notifications/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/redis/.env
+              subPath: .env
+            - name: secret-volume
+              mountPath: /usr/src/app/packages/common/.env
               subPath: .env
       imagePullSecrets:
         - name: regcred

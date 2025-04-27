@@ -1,8 +1,7 @@
 import crypto from "crypto";
 import { razorpay } from "../config/razorpay.instance";
 import { Logger } from "@repo/common/logger";
-import { FRONTEND_URL, NODE_ENV, RAZORPAY_WEBHOOK_SECRET } from "../env";
-import { DEVELOPMENT } from "@repo/common/constants";
+import { NEXT_PUBLIC_BASE_URL, NODE_ENV, RAZORPAY_WEBHOOK_SECRET } from "../env";
 import { prisma } from "@repo/mongodb";
 
 const logger = new Logger();
@@ -55,7 +54,7 @@ export const createUPIPaymentLink = async ({
   upiId,
   donorId,
   applicantId,
-  reference,
+  reference
 }: UPIPaymentLinkParams) => {
   try {
     // Create payment link data
@@ -65,27 +64,27 @@ export const createUPIPaymentLink = async ({
       accept_partial: false,
       description: `Donation to ${upiId}`,
       reference_id: reference,
-      callback_url: `${FRONTEND_URL}/razorpay-payment-status`,
+      callback_url: `${NEXT_PUBLIC_BASE_URL}/razorpay-payment-status`,
       callback_method: "get",
       customer: {
-        name: "Donor", // Required field
+        name: "Donor" // Required field
       },
       notes: {
         donorId,
-        applicantId,
+        applicantId
       },
       options: {
         checkout: {
           name: "Donation Payment",
           prefill: {
-            method: "upi",
-          },
+            method: "upi"
+          }
         },
         upi: {
           vpa: upiId,
-          flow: "collect",
-        },
-      },
+          flow: "collect"
+        }
+      }
     };
 
     // Create payment link using Razorpay with Promise
@@ -99,7 +98,7 @@ export const createUPIPaymentLink = async ({
       });
     });
 
-    if (NODE_ENV === DEVELOPMENT) {
+    if (NODE_ENV === "development") {
       logger.info("Razorpay payment link created successfully: ", paymentLink);
     }
 
@@ -119,12 +118,12 @@ export const createUPIPaymentLink = async ({
         metadata: {
           created_at: new Date(),
           platform: "razorpay",
-          payment_type: "upi",
-        },
-      },
+          payment_type: "upi"
+        }
+      }
     });
 
-    if (NODE_ENV === DEVELOPMENT) {
+    if (NODE_ENV === "development") {
       logger.info("Transaction record created:", transaction);
     }
 
@@ -134,7 +133,7 @@ export const createUPIPaymentLink = async ({
       paymentLinkUrl: transaction.paymentLinkUrl,
       amount: transaction.amount,
       currency: transaction.currency,
-      upiId: transaction.upiId,
+      upiId: transaction.upiId
     };
   } catch (error) {
     logger.error("Payment link creation failed:", error);
@@ -145,10 +144,7 @@ export const createUPIPaymentLink = async ({
 /**
  * Verifies the payment status using Razorpay webhook signature
  */
-export const verifyPaymentWebhook = async (
-  razorpay_signature: string,
-  webhookBody: string
-) => {
+export const verifyPaymentWebhook = async (razorpay_signature: string, webhookBody: string) => {
   try {
     if (!RAZORPAY_WEBHOOK_SECRET) {
       throw new Error("Razorpay webhook secret not configured");

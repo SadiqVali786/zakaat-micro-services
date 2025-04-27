@@ -8,5 +8,8 @@
     "test": "echo 'No tests specified'",
     "check-types": "mypy .",
     "lint": "ruff check . --fix"
+  },
+  "dependencies": {
+    "@repo/common": "*"
   }
 }

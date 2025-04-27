@@ -5,11 +5,12 @@ import { UserManager } from "./user-manager";
 import {
   type ExtendedWebSocket,
   type Client,
-  DifferentWebRTCSignallingServerMessages,
+  DifferentWebRTCSignallingServerMessages
 } from "@repo/common/types";
 import { MessageHandler } from "./message-handler";
 import { Logger } from "@repo/common/logger";
 import { authenticate } from "@repo/common/auth-service";
+import { printEnvironmentVariables } from "@repo/common/print-env-variables";
 
 const logger = new Logger();
 const server = createServer();
@@ -17,42 +18,41 @@ const wss = new WebSocketServer({ noServer: true });
 const userManager = UserManager.getInstance();
 const messageHandler = MessageHandler.getInstance();
 
-wss.on(
-  "connection",
-  (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
-    // Initialize socket with user data
-    ws.userId = client.userId;
-    ws.name = client.name;
-    ws.role = client.role;
-    ws.email = client.email;
-    ws.image = client.image;
+printEnvironmentVariables();
 
-    // Add user and socket to user manager
-    userManager.addUser(ws);
+wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage, client: Client) => {
+  // Initialize socket with user data
+  ws.userId = client.userId;
+  ws.name = client.name;
+  ws.role = client.role;
+  ws.email = client.email;
+  ws.image = client.image;
 
-    ws.on("error", console.error);
+  // Add user and socket to user manager
+  userManager.addUser(ws);
 
-    ws.on("message", async (message: string) => {
-      // TODO: add rate limitting logic here
-      try {
-        await messageHandler.handleMessage(ws, message);
-      } catch (error) {
-        logger.error("Error handling message:", error);
-        ws.send(
-          JSON.stringify({
-            type: DifferentWebRTCSignallingServerMessages.Error,
-            payload: null,
-          })
-        );
-      }
-    });
+  ws.on("error", console.error);
 
-    // Event listener for when a client disconnects
-    ws.on("close", () => {
-      userManager.removeUser(ws.userId);
-    });
-  }
-);
+  ws.on("message", async (message: string) => {
+    // TODO: add rate limitting logic here
+    try {
+      await messageHandler.handleMessage(ws, message);
+    } catch (error) {
+      logger.error("Error handling message:", error);
+      ws.send(
+        JSON.stringify({
+          type: DifferentWebRTCSignallingServerMessages.Error,
+          payload: null
+        })
+      );
+    }
+  });
+
+  // Event listener for when a client disconnects
+  ws.on("close", () => {
+    userManager.removeUser(ws.userId);
+  });
+});
 
 server.on("upgrade", (request: IncomingMessage, socket, head) => {
   socket.on("error", console.error);

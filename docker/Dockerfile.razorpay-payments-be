@@ -15,7 +15,7 @@ COPY ./apps/razorpay-payments-be/ ./apps/razorpay-payments-be/
 COPY ./packages/common/ ./packages/common/
 COPY ./packages/mongodb/ ./packages/mongodb/
 
-ENV NODE_ENV=PRODUCTION
+ENV NODE_ENV=development
 
 EXPOSE 8001
 

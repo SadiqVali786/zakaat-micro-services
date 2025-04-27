@@ -15,6 +15,7 @@ const DonorDonationsHistoryPage = async () => {
         <div key={donation.id} className="min-h-[150vh]">
           <ZakaatApplication
             reason={donation.reason}
+            upiId={donation.author.upiId!}
             name={donation.verifier?.name ?? ""}
             amount={donation.amount}
             rank={donation.rating}

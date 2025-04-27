@@ -13,7 +13,7 @@ RUN bun install
 COPY ./apps/webrtc-signaling-be/ ./apps/webrtc-signaling-be/
 COPY ./packages/common/ ./packages/common/
 
-ENV NODE_ENV=PRODUCTION
+ENV NODE_ENV=development
 
 EXPOSE 8002
 
