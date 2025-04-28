@@ -1,10 +1,10 @@
 import { importJWK, JWTPayload, SignJWT } from "jose";
 import NextAuth, { DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma, UserRole } from "@repo/mongodb";
+import { prisma } from "@repo/mongodb";
 import authConfig from "@/auth/auth.config";
 import { AUTH_TOKEN_EXPIRATION_TIME } from "@/config/auth.config";
-import { UserActivity } from "@repo/common/types";
+import { UserActivity, UserRole } from "@repo/common/types";
 import { redisQueue } from "@repo/redis";
 
 type ISODateString = string;
@@ -100,6 +100,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     // Logged in users are authenticated, otherwise redirect to login page
     authorized: async ({ auth }) => !!auth
+  },
+  pages: {
+    signIn: "/auth/signin"
+    // signOut: "/auth/log-out",
+    // error: "/auth/error"
   }
-  // pages: { signIn: "/auth/login", signOut: "/auth/log-out", error: "/auth/error" }
 });

@@ -1,13 +1,20 @@
-FROM python:3.11-alpine
+FROM python:3.11-slim
 
 WORKDIR /usr/src/app
 
-COPY ./requirements.txt ./requirements.txt
-RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+COPY ./apps/fastapi-face-verification-be/requirements.txt ./apps/fastapi-face-verification-be/requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r ./apps/fastapi-face-verification-be/requirements.txt
 
-ENV ENV=development
+COPY ./apps/fastapi-face-verification-be ./apps/fastapi-face-verification-be
+
+ENV ENV=production
 EXPOSE 8000
 
-CMD python main.py
+CMD ["python", "./apps/fastapi-face-verification-be/main.py"]

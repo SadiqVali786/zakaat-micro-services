@@ -29,7 +29,7 @@ spec:
               service:
                 name: nextjs-web-app
                 port:
-                  number: 3000
+                  number: 80
     - host: payments.sadiq.com
       http:
         paths:
@@ -39,7 +39,7 @@ spec:
               service:
                 name: razorpay-payments-be
                 port:
-                  number: 8001
+                  number: 80
     - host: signalling.sadiq.com
       http:
         paths:
@@ -49,7 +49,7 @@ spec:
               service:
                 name: webrtc-signalling-be
                 port:
-                  number: 8002
+                  number: 80
     - host: websockets.sadiq.com
       http:
         paths:
@@ -59,4 +59,4 @@ spec:
               service:
                 name: web-sockets-be
                 port:
-                  number: 8003
+                  number: 80

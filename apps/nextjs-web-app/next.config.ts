@@ -29,6 +29,14 @@ const nextConfig: NextConfig = {
     ]
   },
   output: "standalone"
+  // experimental: {
+  //   serverActions: {
+  //     allowedOrigins: ["localhost:3000", "192.168.1.7:3000"]
+  //   }
+  // },
+  // env: {
+  //   NEXTAUTH_URL: process.env.NEXTAUTH_URL
+  // }
 };
 
 export default nextConfig;

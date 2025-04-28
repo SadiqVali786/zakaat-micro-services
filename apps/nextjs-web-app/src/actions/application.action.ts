@@ -6,8 +6,8 @@ import { APP_PATHS } from "@/config/path.config";
 import { APPLICATIONS_PER_PAGE } from "@/config/server-actions.config";
 import { uploadFile } from "@/lib/upload-file";
 import { ApplicationWithAuthorAndVerifier } from "@/types/fetch-application-action.type";
-import { ApplicationStatus, prisma } from "@repo/mongodb";
-import { UserRole } from "@repo/mongodb";
+import { ApplicationStatus, UserRole } from "@repo/common/types";
+import { prisma } from "@repo/mongodb";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "safe-actions-state";
 import { z } from "zod";
@@ -35,7 +35,7 @@ export const fetchApplicationsHandler = async (args?: z.infer<typeof fetchApplic
           },
           distanceField: "distance",
           spherical: true,
-          query: { role: UserRole.APPLICANT },
+          query: { role: UserRole.Applicant },
           key: "location",
           distanceMultiplier: 0.001,
           minDistance: 0,
@@ -102,7 +102,7 @@ export const SafeServerAction = createSafeAction({
     schema: fetchApplicationsSchema
   },
   actionType: {
-    allowedRoles: [UserRole.DONOR],
+    allowedRoles: [UserRole.Donor],
     isPrivate: true
   }
 });
@@ -189,7 +189,7 @@ export const BookmarkApplication = async (applicationId: string) => {
   if (!session?.user) return null;
   const application = await prisma.application.update({
     where: { id: applicationId },
-    data: { bookmarkedUserId: session.user.id, status: ApplicationStatus.BOOKMARKED }
+    data: { bookmarkedUserId: session.user.id, status: ApplicationStatus.Bookmarked }
   });
   revalidatePath(APP_PATHS.DONOR_DASHBOARD_ZAKAAT_APPLICATIONS);
   // return application;
@@ -201,7 +201,7 @@ export const UnbookmarkApplication = async (applicationId: string) => {
   if (!session?.user) return null;
   const application = await prisma.application.update({
     where: { id: applicationId },
-    data: { bookmarkedUserId: undefined, status: ApplicationStatus.VERIFIED }
+    data: { bookmarkedUserId: undefined, status: ApplicationStatus.Verified }
   });
   revalidatePath(APP_PATHS.DONOR_DASHBOARD_BOOKMARKED_APPLICATIONS);
   // return application;
@@ -218,7 +218,7 @@ export const CreateApplication = async (application: z.infer<typeof applySchema>
   if (!session?.user) return null;
 
   const selfie = application.selfie ? await uploadFile(application.selfie) : null;
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: any) => {
     const author = await tx.user.update({
       where: { email: application.email },
       data: {

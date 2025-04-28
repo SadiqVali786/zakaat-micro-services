@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { APP_PATHS } from "@/config/path.config";
-export default function PaymentStatusPage() {
+
+function PaymentStatusContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -93,5 +94,13 @@ export default function PaymentStatusPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentStatusPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentStatusContent />
+    </Suspense>
   );
 }

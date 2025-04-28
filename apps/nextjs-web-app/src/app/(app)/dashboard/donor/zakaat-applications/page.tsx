@@ -3,12 +3,20 @@ import { fetchApplicationsHandler } from "@/actions/application.action";
 import { ZakaatApplication } from "../../_components/zakaat-application";
 import { ApplicationsInfiniteScrollFeed } from "./_component/applications-infinite-scroll-feed";
 
-const DonorGenuineApplicationsPage = async ({
-  searchParams
-}: {
-  searchParams: { longitude: string; latitude: string };
-}) => {
-  const { longitude, latitude } = await searchParams;
+type SearchParams = {
+  longitude?: string;
+  latitude?: string;
+  [key: string]: string | string[] | undefined;
+};
+
+interface PageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+const DonorGenuineApplicationsPage = async ({ searchParams }: PageProps) => {
+  const params = await searchParams;
+  const longitude = params.longitude || "";
+  const latitude = params.latitude || "";
   const applications = await fetchApplicationsHandler({ longitude, latitude, page: 1 });
 
   return (

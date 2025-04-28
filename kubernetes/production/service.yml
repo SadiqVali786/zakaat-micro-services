@@ -23,7 +23,8 @@ spec:
   selector:
     app: razorpay-payments-be 
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 8001
   type: ClusterIP

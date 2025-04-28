@@ -1,8 +1,9 @@
 FROM oven/bun:1
 
 WORKDIR /usr/src/app
-
 ARG DATABASE_URL
+
+RUN apt-get update -y && apt-get install -y openssl
 
 COPY ./package.json ./package.json
 COPY ./bun.lock ./bun.lock
@@ -15,15 +16,15 @@ COPY ./packages/zustand/package.json ./packages/zustand/package.json
 
 RUN bun install
 
-COPY ./apps/nextjs-web-app/ ./apps/nextjs-web-app/
 COPY ./packages/common/ ./packages/common/
 COPY ./packages/mongodb/ ./packages/mongodb/
 COPY ./packages/redis/ ./packages/redis/
 COPY ./packages/zustand/ ./packages/zustand/
+COPY ./apps/nextjs-web-app/ ./apps/nextjs-web-app/
 
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 
-RUN bun run db:generate
+RUN bun run generate
 RUN DATABASE_URL=${DATABASE_URL} bun run build
 
 EXPOSE 3000

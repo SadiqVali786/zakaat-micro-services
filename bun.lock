@@ -19,6 +19,9 @@
     "apps/fastapi-face-verification-be": {
       "name": "fast-api-face-verification-be",
       "version": "1.0.0",
+      "dependencies": {
+        "@repo/common": "*",
+      },
     },
     "apps/nextjs-web-app": {
       "name": "nextjs-web-app",
@@ -57,6 +60,7 @@
         "@repo/redis": "*",
         "@repo/zustand": "*",
         "@tabler/icons-react": "^3.31.0",
+        "axios": "^1.9.0",
         "class-variance-authority": "^0.7.1",
         "cloudinary": "^2.6.0",
         "clsx": "^2.1.1",
@@ -96,7 +100,7 @@
         "@tailwindcss/postcss": "^4",
         "@types/lodash": "^4.17.16",
         "@types/node": "^20",
-        "@types/react": "^19",
+        "@types/react": "^19.0.0",
         "@types/react-dom": "^19",
         "eslint": "^9",
         "eslint-config-next": "15.2.4",
@@ -184,6 +188,7 @@
       },
       "devDependencies": {
         "@types/bun": "latest",
+        "@types/ws": "^8.18.1",
       },
       "peerDependencies": {
         "typescript": "^5",

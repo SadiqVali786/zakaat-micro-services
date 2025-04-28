@@ -29,7 +29,7 @@
     "start:nextjs-web-app": "cd apps/nextjs-web-app && bun run start",
     "start:razorpay-payments-be": "cd apps/razorpay-payments-be && bun run start",
     "start:web-sockets-be": "cd apps/web-sockets-be && bun run start",
-    "start:webrtc-signaling-be": "cd apps/webrtc-signaling-be && bun run start",
+    "start:webrtc-signalling-be": "cd apps/webrtc-signalling-be && bun run start",
     "start:worker-be": "cd apps/worker-be && bun run start",
     "prepare": "husky",
     "studio": "turbo run db:studio",
