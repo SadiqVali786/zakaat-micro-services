@@ -5,9 +5,10 @@ metadata:
   region: ap-south-1
 vpc:
   nat:
-    gateway: Single  # <-- Adds NAT for private Pods
+    gateway: Single
 nodeGroups:
   - name: zakaat-microservices-nodes
     instanceType: t3.medium
-    desiredCapacity: 2
+    desiredCapacity: 1
     privateNetworking: true
+    
