@@ -2,25 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zakaat-nginx-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - zakaat.sadiq.com
-      secretName: zakaat-tls
-    - hosts:
-        - payments.sadiq.com
-      secretName: payments-tls
-    - hosts:
-        - signalling.sadiq.com
-      secretName: webrtc-tls
-    - hosts:
-        - websockets.sadiq.com
-      secretName: websockets-tls
   rules:
-    - host: zakaat.sadiq.com
+    - host: zakaat.sadiqvali.in
       http:
         paths:
           - path: /
@@ -30,7 +15,7 @@ spec:
                 name: nextjs-web-app
                 port:
                   number: 80
-    - host: payments.sadiq.com
+    - host: payments.sadiqvali.in
       http:
         paths:
           - path: /
@@ -40,7 +25,7 @@ spec:
                 name: razorpay-payments-be
                 port:
                   number: 80
-    - host: signalling.sadiq.com
+    - host: signalling.sadiqvali.in
       http:
         paths:
           - path: /
@@ -50,7 +35,7 @@ spec:
                 name: webrtc-signalling-be
                 port:
                   number: 80
-    - host: websockets.sadiq.com
+    - host: websockets.sadiqvali.in
       http:
         paths:
           - path: /

@@ -1,14 +1,13 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: zakaat-microservices-cluster
-  region: ap-south-1
+  name: zakaat-microservices-cluster # Name of the cluster
+  region: ap-south-1 # Region of the cluster
 vpc:
   nat:
-    gateway: Single
+    gateway: Single # NAT gateway for the cluster
 nodeGroups:
-  - name: zakaat-microservices-nodes
-    instanceType: t3.medium
-    desiredCapacity: 1
-    privateNetworking: true
-    
+  - name: zakaat-microservices-nodes # Name of the node group
+    instanceType: t3.medium # Instance type for the nodes
+    desiredCapacity: 1 # Number of nodes in the node group
+    privateNetworking: true # Private networking for the node group
