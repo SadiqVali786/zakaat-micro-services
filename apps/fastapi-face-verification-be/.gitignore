@@ -174,3 +174,4 @@ cython_debug/
 fastapi-face-verification-be/
 artifacts/
 logs
+notebooks/

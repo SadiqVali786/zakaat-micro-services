@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Tailwind,
   Body,
@@ -13,6 +11,7 @@ import {
   Html
 } from "@react-email/components";
 import { render } from "@react-email/render";
+import { NEXT_PUBLIC_BASE_URL } from "../env";
 
 const OnboardingEmail = ({ donorName }: { donorName: string }) => {
   return (
@@ -56,7 +55,7 @@ const OnboardingEmail = ({ donorName }: { donorName: string }) => {
               {/* CTA Button */}
               <div className="text-center">
                 <Link
-                  href="https://zakaat.in"
+                  href={`${NEXT_PUBLIC_BASE_URL}/dashboard/donor/zakaat-applications`}
                   className="inline-block rounded-md bg-[#BE52F2] px-8 py-3 text-xl font-bold text-[#F9EEFE]"
                 >
                   Explore Dashboard

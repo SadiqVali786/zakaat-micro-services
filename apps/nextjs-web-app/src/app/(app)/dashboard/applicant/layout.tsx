@@ -5,6 +5,7 @@ import { ApplicantLeftSidebar } from "./_components/applicant-left-sidebar";
 import { EmptyRightSidebar } from "../_components/empty-right-sidebar";
 import { ApplicantMobileMenubar } from "./_components/applicant-mobile-menubar";
 import { Feedbar } from "@/components/global/feed-bar";
+
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
