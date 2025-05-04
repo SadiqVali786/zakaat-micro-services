@@ -4,6 +4,7 @@ import { createUPIPaymentLink, verifyPaymentWebhook } from "../services/payment.
 import { Logger } from "@repo/common/logger";
 import { NODE_ENV } from "../env";
 import { PaymentStatus, prisma } from "@repo/mongodb";
+import { ApplicationStatus } from "@repo/common/types";
 
 const logger = new Logger();
 const paymentRoutes = express.Router();
@@ -85,8 +86,19 @@ paymentRoutes.post("/razorpay/webhook", async (req: Request, res: Response) => {
     if (paymentLinkId) {
       const razorpayStatus = event?.payload?.payment_link?.entity?.status;
       const status = mapRazorpayStatus(razorpayStatus);
+      const { donorId, applicantId } = event?.payload?.payment_link?.entity?.notes || {};
 
-      await prisma.razorpayTransaction.updateMany({
+      if (!donorId || !applicantId) {
+        await prisma.application.update({
+          where: { authorId: applicantId },
+          data: {
+            donorUserId: donorId,
+            status: ApplicationStatus.Donated
+          }
+        });
+      }
+
+      await prisma.razorpayTransaction.update({
         where: { paymentLinkId },
         data: {
           status,

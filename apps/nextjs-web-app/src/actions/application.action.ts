@@ -201,7 +201,7 @@ export const UnbookmarkApplication = async (applicationId: string) => {
   if (!session?.user) return null;
   const application = await prisma.application.update({
     where: { id: applicationId },
-    data: { bookmarkedUserId: undefined, status: ApplicationStatus.Verified }
+    data: { bookmarkedUserId: null, status: ApplicationStatus.Verified }
   });
   revalidatePath(APP_PATHS.DONOR_DASHBOARD_BOOKMARKED_APPLICATIONS);
   // return application;
@@ -277,45 +277,72 @@ export const FetchMyApplication = async () => {
 
 export type SimilarFacesResponse = {
   success: boolean;
-  data?: string[];
+  data?: { similarFaces: string[]; faceEmbedding: number[] };
   error?: string;
 };
 
-export const findSimilarFaces = async (faceEmbedding: number[]): Promise<SimilarFacesResponse> => {
+type EncodedFaceResponse = {
+  status?: "success";
+  embedding?: number[];
+  status_code?: number;
+  detail?: string;
+};
+
+export const findSimilarFaces = async (selfie: FormData): Promise<SimilarFacesResponse> => {
   try {
-    // Validate input
-    if (!Array.isArray(faceEmbedding) || faceEmbedding.length !== 512) {
-      throw new Error("Invalid face embedding. Must be an array of 512 numbers.");
+    const url = `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL !== "http://fastapi-face-verification-be.default.svc.cluster.local" ? process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL : "http://fastapi-face-verification-be.default.svc.cluster.local"}/encode_face`;
+    console.log("URL", url);
+    const response = await fetch(url, { method: "POST", body: selfie });
+    const result = (await response.json()) as EncodedFaceResponse;
+
+    console.log("EncodedFaceResponse : ", result);
+
+    if (result?.status === "success") {
+      // console.log(result);
+      const faceEmbedding = result.embedding!;
+
+      // Validate input
+      if (!Array.isArray(faceEmbedding) || faceEmbedding.length !== 512) {
+        return {
+          success: false,
+          error: "Invalid face embedding. Must be an array of 512 numbers."
+        };
+      }
+
+      // Use MongoDB's aggregation pipeline with vector search
+      const response = await prisma.$runCommandRaw({
+        aggregate: "User",
+        pipeline: [
+          {
+            $vectorSearch: {
+              index: "User_faceEmbedding", // MongoDB automatically names the index
+              path: "faceEmbedding",
+              queryVector: faceEmbedding,
+              numCandidates: 5000,
+              limit: 4
+            }
+          },
+          { $project: { selfie: 1 } }
+        ],
+        cursor: {}
+      });
+
+      console.log("RESULT", (response as any).cursor?.firstBatch);
+
+      const formattedResult = ((response as any).cursor?.firstBatch || []).map(
+        (item: any) => item.selfie
+      );
+
+      return {
+        success: true,
+        data: { similarFaces: formattedResult ? formattedResult : [], faceEmbedding }
+      };
+    } else {
+      return {
+        success: false,
+        error: result?.detail || "Failed to find similar faces"
+      };
     }
-
-    // Use MongoDB's aggregation pipeline with vector search
-    const result = await prisma.$runCommandRaw({
-      aggregate: "User",
-      pipeline: [
-        {
-          $vectorSearch: {
-            index: "User_faceEmbedding", // MongoDB automatically names the index
-            path: "faceEmbedding",
-            queryVector: faceEmbedding,
-            numCandidates: 5000,
-            limit: 4
-          }
-        },
-        { $project: { selfie: 1 } }
-      ],
-      cursor: {}
-    });
-
-    console.log("RESULT", result);
-
-    const formattedResult = ((result as any).cursor?.firstBatch || []).map(
-      (item: any) => item.selfie
-    );
-
-    return {
-      success: true,
-      data: formattedResult ? formattedResult : []
-    };
   } catch (error) {
     console.error("Error in findSimilarFaces:", error);
     return {

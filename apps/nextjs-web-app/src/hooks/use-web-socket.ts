@@ -35,10 +35,9 @@ export const useWebSocket = () => {
 
     const connect = async () => {
       try {
-        console.log("Connecting to WebSocket Server");
-        ws = new WebSocket(
-          `${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL}?token=${session.jwtToken}`
-        );
+        const url = `${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL?.replace("https", "wss")}?token=${session.jwtToken}`;
+        console.log("Connecting to WebSocket Server", url);
+        ws = new WebSocket(url);
 
         // alert(`${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL}?token=${session.jwtToken}`);
         ws.onopen = async () => {

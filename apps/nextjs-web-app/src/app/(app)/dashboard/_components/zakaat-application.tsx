@@ -77,6 +77,7 @@ export const ZakaatApplication = ({
           upiId={upiId}
           applicantName={applicantName}
           applicantImage={selfie}
+          applicationId={applicationId}
         />
       </DropdownMenuContent>
     </DropdownMenu>

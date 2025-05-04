@@ -14,19 +14,15 @@ import { CameraIcon } from "lucide-react";
 
 import selfieInfoGraphic from "@/../public/info-graphics/selfie-info-graphic.png";
 import { findSimilarFaces } from "@/actions/application.action";
-import { BlackAndWhiteNextButton } from "@/components/global/black-and-white-next-button";
 import { ColorfulNextButton } from "@/components/global/color-next-button";
+
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 
 const applySelfieSchema = applySchema.pick({
   selfie: true
 });
-
-type EncodedFaceResponse = {
-  status?: "success";
-  embedding?: number[];
-  status_code?: number;
-  detail?: string;
-};
 
 export default function SearchApplicantPage() {
   const router = useRouter();
@@ -46,33 +42,38 @@ export default function SearchApplicantPage() {
   });
 
   const onSubmit = async (data: z.infer<typeof applySelfieSchema>) => {
-    setData(data);
-    // Encode the face with fastapi backend
-    const fetchData = new FormData();
-    fetchData.append("file", data.selfie);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL}/encode_face`,
-      { method: "POST", body: fetchData }
-    );
-    const result = (await response.json()) as EncodedFaceResponse;
-    if (result?.status === "success") {
-      // console.log(result);
-      const encodedFace = result.embedding!;
-      setData({ encodedFace });
-      const response = await findSimilarFaces(encodedFace);
-      // console.log("RESPONSE", response);
-      if (response.success) {
-        if (response.data && response.data.length > 0) {
-          setSimilarFaces(response.data!);
+    try {
+      setData(data);
+      // Encode the face with fastapi backend
+      const fetchData = new FormData();
+      fetchData.append("file", data.selfie);
+      // const response = await fetch(
+      //   `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL}/encode_face`,
+      //   { method: "POST", body: fetchData }
+      // );
+      // const result = (await response.json()) as EncodedFaceResponse;
+      // if (result?.status === "success") {
+      //   // console.log(result);
+      //   const encodedFace = result.embedding!;
+      //   setData({ encodedFace });
+      const response = await findSimilarFaces(fetchData);
+      console.log("RESPONSE", response);
+      if (response?.success) {
+        if (response.data && response.data.similarFaces.length > 0) {
+          setData({ encodedFace: response.data.faceEmbedding });
+          setSimilarFaces(response.data.similarFaces);
         } else {
           setSimilarFaces([]);
+          toast.success("Create new application.");
           handleGenuineApplicant();
         }
       } else {
-        console.error(response.error);
+        toast.error(response.error);
       }
-    } else {
-      console.error(result.detail);
+    } catch (error) {
+      toast.error("An error occurred while searching for similar faces.", {
+        description: `${error}`
+      });
     }
   };
 
@@ -138,7 +139,7 @@ export default function SearchApplicantPage() {
                     </FormItem>
                   )}
                 />
-                {/* <Button
+                <Button
                   type="submit"
                   className="hover:bg-brand-dark bg-brand-dark m-0 mt-1 flex cursor-pointer items-center gap-2 self-end rounded-lg border border-[#211f30] bg-gradient-to-b from-[#030014] to-[#292637] !px-4 !py-5 text-xl leading-normal text-[#8e8c95]"
                 >
@@ -153,8 +154,8 @@ export default function SearchApplicantPage() {
                   >
                     Next
                   </span>
-                </Button> */}
-                <BlackAndWhiteNextButton />
+                </Button>
+                {/* <BlackAndWhiteNextButton /> */}
               </form>
             </Form>
           </div>

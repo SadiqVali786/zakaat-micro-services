@@ -27,10 +27,9 @@ export const useWebRTCSignaling = () => {
 
     const connect = () => {
       try {
-        console.log("Connecting to WebRTC Signaling Server");
-        ws = new WebSocket(
-          `${process.env.NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL}?token=${session.jwtToken}`
-        );
+        const url = `${process.env.NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL?.replace("https", "wss")}?token=${session.jwtToken}`;
+        console.log("Connecting to WebRTC Signaling Server", url);
+        ws = new WebSocket(url);
 
         // Initialize PeerJS
         peer = new Peer();

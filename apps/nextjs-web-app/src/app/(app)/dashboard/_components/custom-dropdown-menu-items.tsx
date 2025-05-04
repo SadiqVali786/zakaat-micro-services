@@ -20,6 +20,7 @@ type Props = {
   applicantImage: string;
   amount: number;
   upiId: string;
+  applicationId: string;
 };
 
 type PaymentLinkResponse = {
@@ -36,7 +37,8 @@ export const CustomDropdownMenuItems = ({
   applicantName,
   applicantImage,
   amount,
-  upiId
+  upiId,
+  applicationId
 }: Props) => {
   const state = useChatStore();
   const router = useRouter();
@@ -130,7 +132,7 @@ export const CustomDropdownMenuItems = ({
       <DropdownMenuItem
         className="hover:!bg-brand-dark"
         onClick={() =>
-          isItBookmark ? UnbookmarkApplication(applicantId) : BookmarkApplication(applicantId)
+          isItBookmark ? UnbookmarkApplication(applicationId) : BookmarkApplication(applicationId)
         }
       >
         {isItBookmark ? "Unbookmark" : "Bookmark"}

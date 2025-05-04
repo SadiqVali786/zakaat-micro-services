@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description:
     "Zakaat distribution web & mobile app for deserving, verified poor individuals in your locality and among relatives, neighbours who can't directly ask for help due to dignity.",
   icons: {
-    icon: "@/../public/logo/logo.png"
+    icon: "/logo/logo.png"
   }
 };
 

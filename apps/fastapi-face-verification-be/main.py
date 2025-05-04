@@ -25,7 +25,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TF logging
 tf.config.set_visible_devices([], 'GPU')  # Disable GPU
 
 load_dotenv()
-PORT = int(os.getenv("FASTAPI_FACE_VERIFICATION_BE_PORT", "8000"))
+PORT = int(os.getenv("FASTAPI_FACE_VERIFICATION_BE_PORT_MINE", "8000"))
 ENV = os.getenv("ENV", "development")
 
 HOST = "127.0.0.1" if ENV == "development" else "0.0.0.0"
