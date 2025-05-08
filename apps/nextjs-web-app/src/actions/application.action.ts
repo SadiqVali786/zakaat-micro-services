@@ -217,13 +217,12 @@ export const CreateApplication = async (application: z.infer<typeof applySchema>
   const session = await auth();
   if (!session?.user) return null;
 
-  const selfie = application.selfie ? await uploadFile(application.selfie) : null;
   await prisma.$transaction(async (tx: any) => {
     const author = await tx.user.update({
       where: { email: application.email },
       data: {
         upiId: application.upiId,
-        selfie: selfie?.url,
+        selfie: application.selfie,
         location: {
           type: "Point",
           coordinates: [application.longitude, application.latitude]
@@ -290,8 +289,7 @@ type EncodedFaceResponse = {
 
 export const findSimilarFaces = async (selfie: FormData): Promise<SimilarFacesResponse> => {
   try {
-    const url = `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL !== "http://fastapi-face-verification-be.default.svc.cluster.local" ? process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL : "http://fastapi-face-verification-be.default.svc.cluster.local"}/encode_face`;
-    console.log("URL", url);
+    const url = `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL}/encode_face`;
     const response = await fetch(url, { method: "POST", body: selfie });
     const result = (await response.json()) as EncodedFaceResponse;
 

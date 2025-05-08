@@ -6,15 +6,28 @@ import { useRouter } from "next/navigation";
 import { useVideoCallStore } from "@repo/zustand/src/video-call-store";
 import { APP_PATHS } from "@/config/path.config";
 import { useMediaStream } from "@/hooks/use-media-stream";
-import { WebRTCCallStatus } from "@repo/common/types";
+import { UserRole, WebRTCCallStatus } from "@repo/common/types";
 // import { MdCall, MdCallEnd } from "react-icons/md";
 // import { IoVideocamOff, IoVideocamSharp, IoVolumeMute } from "react-icons/io5";
 // import { IoVolumeHighSharp } from "react-icons/io5";
 import { RenderIncomingCallStatus } from "@/app/(app)/dashboard/_components/render-incoming-call-status";
 import { VideoCallScreen } from "../../donor/_components/video-call-screen";
+import { useSession } from "next-auth/react";
 
 export default function VideoCallPage() {
   const router = useRouter();
+
+  const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Applicant) {
+    if (session?.user.role === UserRole.Donor) {
+      router.push(APP_PATHS.DONOR_DASHBOARD_ZAKAAT_APPLICATIONS);
+    } else if (session?.user.role === UserRole.Verifier) {
+      router.push(APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   useMediaStream(localVideoRef);
@@ -109,6 +122,35 @@ export default function VideoCallPage() {
       });
     }
   }, [mediaStream]);
+
+  // For outgoing calls
+  useEffect(() => {
+    if (peer && remotePeerId && mediaStream) {
+      const call = peer.call(remotePeerId, mediaStream);
+      setCallReference(call);
+      setCallStatus(WebRTCCallStatus.Outgoing);
+
+      // Set up data channel for outgoing calls
+      const dataChannel = call.peerConnection.createDataChannel("mediaControls");
+      setupDataChannel(dataChannel);
+
+      call.on("stream", (remoteStream) => {
+        if (remoteVideoRef.current) {
+          setCallStatus(WebRTCCallStatus.Connected);
+          remoteVideoRef.current.srcObject = remoteStream;
+          remoteVideoRef.current.play().catch(console.error);
+        }
+      });
+
+      // Handle incoming data channel
+      call.peerConnection.ondatachannel = (event) => {
+        setupDataChannel(event.channel);
+      };
+
+      call.on("close", handleEndCall);
+      call.on("error", handleEndCall);
+    }
+  }, [remotePeerId]);
 
   const setupDataChannel = (channel: RTCDataChannel) => {
     const { setDataChannel, setRemoteMediaControls } = useVideoCallStore.getState();

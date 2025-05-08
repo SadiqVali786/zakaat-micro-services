@@ -3,7 +3,7 @@ import { z } from "zod";
 export const applySchema = z.object({
   email: z.string().min(1),
   upiId: z.string().min(3),
-  selfie: z.instanceof(File),
+  selfie: z.string(),
   latitude: z.number().min(1),
   longitude: z.number().min(1),
   reason: z.string().min(1),

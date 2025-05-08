@@ -13,6 +13,9 @@ import { APP_PATHS } from "@/config/path.config";
 import { useRouter } from "next/navigation";
 import { getRoomIds } from "@/actions/message.actions";
 
+const MAX_RECONNECT_ATTEMPTS = 10;
+const RECONNECT_DELAY = 1000; // 1s
+
 export const useWebSocket = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -35,16 +38,15 @@ export const useWebSocket = () => {
 
     const connect = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL?.replace("https", "wss")}?token=${session.jwtToken}`;
+        const url = `${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL}?token=${session.jwtToken}`;
         console.log("Connecting to WebSocket Server", url);
         ws = new WebSocket(url);
 
-        // alert(`${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL}?token=${session.jwtToken}`);
         ws.onopen = async () => {
-          // alert("CONNECTED");
           console.log("WebSocket Server Connected");
           reconnectAttempt = 0; // Reset reconnection attempts on successful connection
           setWs(ws!);
+
           const roomIds = await getRoomIds();
           ws?.send(
             JSON.stringify({
@@ -56,13 +58,21 @@ export const useWebSocket = () => {
 
         ws.onclose = () => {
           console.log("WebSocket connection closed. Attempting to reconnect...");
-          reconnectAttempt++;
-          reconnectTimeout = setTimeout(connect, 1000);
+
+          if (reconnectAttempt < MAX_RECONNECT_ATTEMPTS) {
+            reconnectAttempt++;
+            console.log(
+              `Reconnecting in ${RECONNECT_DELAY}ms (attempt ${reconnectAttempt}/${MAX_RECONNECT_ATTEMPTS})`
+            );
+            reconnectTimeout = setTimeout(connect, RECONNECT_DELAY);
+          } else {
+            console.log("Max reconnection attempts reached");
+          }
         };
 
         ws.onerror = (error) => {
           console.log("WebSocket error:", error);
-          // ws?.close(); // This will trigger onclose and attempt reconnection
+          ws?.close();
         };
 
         ws.onmessage = (event) => {
@@ -83,7 +93,7 @@ export const useWebSocket = () => {
 
             case DifferentRoomMessages.CreateRoom:
               addRoom(message.payload);
-              router.push(`${APP_PATHS.APPLICANT_DASHBOARD_MESSAGES}`); // TODO: Show  a popup window and a button in the popup window to redirect to the new room
+              router.push(`${APP_PATHS.APPLICANT_DASHBOARD_MESSAGES}`);
               break;
 
             case DifferentMessageStatus.Received:
@@ -102,7 +112,9 @@ export const useWebSocket = () => {
         };
       } catch (error) {
         console.error("WebSocket connection error:", error);
-        reconnectTimeout = setTimeout(connect, 1000);
+        if (reconnectAttempt < MAX_RECONNECT_ATTEMPTS) {
+          reconnectTimeout = setTimeout(connect, RECONNECT_DELAY);
+        }
       }
     };
 

@@ -6,9 +6,24 @@ import gpsInfoGraphic from "@/../public/info-graphics/gps-info-graphics.png";
 import Image from "next/image";
 import { ArrowRight, MapPinCheckInside } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { APP_PATHS } from "@/config/path.config";
+import { UserRole } from "@repo/common/types";
+import { useSession } from "next-auth/react";
 
 export default function CollectGpsValues() {
   const router = useRouter();
+
+  const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Donor) {
+    if (session?.user.role === UserRole.Applicant) {
+      router.push(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Verifier) {
+      router.push(APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const setLocation = useDonorLocationStore((state) => state.setLocation);
   const latitude = useDonorLocationStore((state) => state.latitude);
   const longitude = useDonorLocationStore((state) => state.longitude);

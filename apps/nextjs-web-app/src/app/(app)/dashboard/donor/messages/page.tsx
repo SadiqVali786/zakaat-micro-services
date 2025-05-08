@@ -9,11 +9,25 @@ import { useChatStore } from "@repo/zustand/src/chat-store";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { getRooms } from "@/actions/message.actions";
-import { DifferentMessageStatus } from "@repo/common/types";
+import { DifferentMessageStatus, UserRole } from "@repo/common/types";
 import { formatRelativeDate } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { APP_PATHS } from "@/config/path.config";
 
 const DonorMessagesPage = () => {
+  const router = useRouter();
+
   const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Donor) {
+    if (session?.user.role === UserRole.Applicant) {
+      router.push(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Verifier) {
+      router.push(APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const store = useChatStore();
   const rooms = store.rooms;
 

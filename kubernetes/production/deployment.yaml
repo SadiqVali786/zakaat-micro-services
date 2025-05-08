@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs-web-app
+  labels:
+    app: nextjs-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextjs-web-app
+  template:
+    metadata:
+      labels:
+        app: nextjs-web-app
+    spec:
+      containers:
+        - name: nextjs-web-app
+          image: 715873012446.dkr.ecr.ap-south-1.amazonaws.com/sadiq/nextjs-web-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: secrets-volume
+              mountPath: /usr/src/app/apps/nextjs-web-app/.env
+              subPath: .env
+            - name: secrets-volume
+              mountPath: /usr/src/app/packages/mongodb/.env
+              subPath: .env
+            - name: secrets-volume
+              mountPath: /usr/src/app/packages/redis/.env
+              subPath: .env
+            - name: secrets-volume
+              mountPath: /usr/src/app/packages/common/.env
+              subPath: .env
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: secrets-volume
+          secret:
+            secretName: zakaat-secrets
+            items:
+              - key: .env
+                path: .env

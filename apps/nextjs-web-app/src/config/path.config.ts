@@ -14,6 +14,8 @@ export const APP_PATHS = {
   APPLICANT_DASHBOARD_VIDEO_CALL: "/dashboard/applicant/video-call",
   APPLICANT_DASHBOARD_MESSAGES: "/dashboard/applicant/messages",
 
+  WELCOME: "/welcome",
+
   PROFILE: "/profile",
   HOME: "/",
   SIGNIN: "/auth/signin",

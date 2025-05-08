@@ -7,8 +7,8 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { cn } from "@/lib/utils";
 import { InitWebRTCConnection } from "@/components/hook-components/init-webrtc-connection";
 import { InitWebSocketsConnection } from "@/components/hook-components/init-web-sockets-connection";
-import { Toaster } from "@/components/ui/sonner";
-import { printEnvironmentVariables } from "@repo/common/print-env-variables";
+// import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "sonner";
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,7 +16,12 @@ export const metadata: Metadata = {
   description:
     "Zakaat distribution web & mobile app for deserving, verified poor individuals in your locality and among relatives, neighbours who can't directly ask for help due to dignity.",
   icons: {
-    icon: "/logo/logo.png"
+    icon: [
+      { url: "/logo/logo.png", rel: "icon" },
+      { url: "/logo/logo.png", sizes: "32x32", type: "image/png", rel: "icon" },
+      { url: "/logo/logo.png", sizes: "16x16", type: "image/png", rel: "icon" }
+    ],
+    apple: [{ url: "/logo/logo.png", rel: "apple-touch-icon" }]
   }
 };
 
@@ -25,7 +30,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  printEnvironmentVariables();
+  console.log({
+    NEXT_PUBLIC_WEB_SOCKETS_BE_URL: process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL,
+    NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL:
+      process.env.NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL
+  });
 
   return (
     <html lang="en" suppressHydrationWarning>

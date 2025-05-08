@@ -2,8 +2,23 @@ import { FetchTweets } from "@/actions/tweet.action";
 import { InfiniteTweetsScrollFeed } from "./_components/infinite-tweets-scroll-feed";
 import TweetForm from "./_components/tweet-form";
 import { Tweet } from "../_components/tweet";
+import { auth } from "@/auth";
+import { UserRole } from "@repo/common/types";
+import { APP_PATHS } from "@/config/path.config";
+import { redirect } from "next/navigation";
 
 const DonorFollowingTweetsPage = async () => {
+  const session = await auth();
+  if (session?.user.role !== UserRole.Donor) {
+    if (session?.user.role === UserRole.Applicant) {
+      redirect(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Verifier) {
+      redirect(APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT);
+    } else {
+      redirect(APP_PATHS.HOME);
+    }
+  }
+
   const tweets = await FetchTweets({ page: 1 });
   // console.log(tweets);
 

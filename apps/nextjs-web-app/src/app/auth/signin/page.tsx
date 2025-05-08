@@ -16,9 +16,7 @@ const SigninPage = () => {
           </div>
           <div
             className="border-neutral-11 flex w-[300px] cursor-pointer items-center justify-center gap-x-5 rounded-xl border px-5 py-[10px]"
-            onClick={async () =>
-              await signIn("github", { redirectTo: APP_PATHS.DONOR_DASHBOARD_TWEETS })
-            }
+            onClick={async () => await signIn("github", { redirectTo: APP_PATHS.WELCOME })}
           >
             <Image src={GoogleLogo} alt="Google logo" />
             <span>Continue with Google</span>

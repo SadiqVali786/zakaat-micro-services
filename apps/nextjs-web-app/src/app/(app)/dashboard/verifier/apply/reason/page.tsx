@@ -14,6 +14,8 @@ import { APP_PATHS } from "@/config/path.config";
 import { useRouter } from "next/navigation";
 import { CreateApplication } from "@/actions/application.action";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@repo/common/types";
 
 const applyReasonSchema = applySchema.pick({
   amount: true,
@@ -22,6 +24,19 @@ const applyReasonSchema = applySchema.pick({
 });
 
 export default function ReasonPage() {
+  const router = useRouter();
+
+  const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Verifier) {
+    if (session?.user.role === UserRole.Applicant) {
+      router.push(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Donor) {
+      router.push(APP_PATHS.DONOR_DASHBOARD_MESSAGES);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const email = useApplyZakaatApplicationStore((state) => state.email);
   const upiId = useApplyZakaatApplicationStore((state) => state.upiId);
   const selfie = useApplyZakaatApplicationStore((state) => state.selfie);
@@ -29,8 +44,6 @@ export default function ReasonPage() {
   const longitude = useApplyZakaatApplicationStore((state) => state.longitude);
   const encodedFace = useApplyZakaatApplicationStore((state) => state.encodedFace);
   const reset = useApplyZakaatApplicationStore((state) => state.reset);
-
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof applyReasonSchema>>({
     resolver: zodResolver(applyReasonSchema),

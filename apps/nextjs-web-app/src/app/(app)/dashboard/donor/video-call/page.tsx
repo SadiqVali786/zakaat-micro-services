@@ -6,18 +6,28 @@ import { useRouter } from "next/navigation";
 import { useVideoCallStore } from "@repo/zustand/src/video-call-store";
 import { APP_PATHS } from "@/config/path.config";
 import { useMediaStream } from "@/hooks/use-media-stream";
-import { WebRTCCallStatus } from "@repo/common/types";
-// import { MdCallEnd } from "react-icons/md";
-// import { MdCall } from "react-icons/md";
-// import { IoVideocamOff } from "react-icons/io5";
-// import { IoVideocamSharp } from "react-icons/io5";
-// import { IoVolumeMute } from "react-icons/io5";
+import { UserRole, WebRTCCallStatus } from "@repo/common/types";
+// import { MdCall, MdCallEnd } from "react-icons/md";
+// import { IoVideocamOff, IoVideocamSharp, IoVolumeMute } from "react-icons/io5";
 // import { IoVolumeHighSharp } from "react-icons/io5";
 import { RenderOutgoingCallStatus } from "@/app/(app)/dashboard/_components/render-outgoing-call-status";
 import { VideoCallScreen } from "@/app/(app)/dashboard/donor/_components/video-call-screen";
+import { useSession } from "next-auth/react";
 
 export default function VideoCallPage() {
   const router = useRouter();
+
+  const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Donor) {
+    if (session?.user.role === UserRole.Applicant) {
+      router.push(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Verifier) {
+      router.push(APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   useMediaStream(localVideoRef);

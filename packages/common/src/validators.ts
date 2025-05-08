@@ -4,22 +4,22 @@ import {
   DifferentRoomMessages,
   DifferentWebRTCSignallingServerMessages,
   UserActivity,
-  UserStatus,
+  UserStatus
 } from "./types";
 
 // WORKER SERVER INPUTS FROM REDIS QUEUE VALIDATORS
 export const UserOfflineSchema = z.object({
   type: z.literal(UserStatus.Offline),
   payload: z.object({
-    userId: z.string(),
-  }),
+    userId: z.string()
+  })
 });
 
 export const UserOnlineSchema = z.object({
   type: z.literal(UserStatus.Online),
   payload: z.object({
-    userId: z.string(),
-  }),
+    userId: z.string()
+  })
 });
 
 export const ChatMessageSchema = z.object({
@@ -27,8 +27,8 @@ export const ChatMessageSchema = z.object({
   payload: z.object({
     roomId: z.string(),
     senderId: z.string(),
-    content: z.string(),
-  }),
+    content: z.string()
+  })
 });
 
 export const ChatResponseSchema = z.object({
@@ -38,8 +38,8 @@ export const ChatResponseSchema = z.object({
     senderId: z.string(),
     content: z.string(),
     messageId: z.string(),
-    sentAt: z.date(),
-  }),
+    sentAt: z.date()
+  })
 });
 
 export const ChatMessageReceivedSchema = z.object({
@@ -47,24 +47,24 @@ export const ChatMessageReceivedSchema = z.object({
   payload: z.object({
     roomId: z.string(),
     senderId: z.string(),
-    messageId: z.string(),
-  }),
+    messageId: z.string()
+  })
 });
 
 export const ChatMessageSeenSchema = z.object({
   type: z.literal(DifferentMessageStatus.Seen),
   payload: z.object({
     roomId: z.string(),
-    senderId: z.string(),
-  }),
+    senderId: z.string()
+  })
 });
 
 export const UserOnboardingSchema = z.object({
   type: z.literal(UserActivity.OnboardingEmail),
   payload: z.object({
     donorEmail: z.string(),
-    donorName: z.string(),
-  }),
+    donorName: z.string()
+  })
 });
 
 export const WorkerMessagesSchema = z.union([
@@ -73,7 +73,7 @@ export const WorkerMessagesSchema = z.union([
   ChatMessageSeenSchema,
   UserOfflineSchema,
   UserOnlineSchema,
-  UserOnboardingSchema,
+  UserOnboardingSchema
 ]);
 
 export const WorkerResponsesSchema = ChatResponseSchema;
@@ -85,43 +85,43 @@ export const ConsentMessageSchema = z.object({
     donorId: z.string(),
     donorName: z.string(),
     donorImage: z.string(),
-    applicantId: z.string(),
-  }),
+    applicantId: z.string()
+  })
 });
 
 export const PermissionMessageSchema = z.object({
   type: z.literal(DifferentWebRTCSignallingServerMessages.Permission),
   payload: z.object({
     donorId: z.string(),
-    applicantPeerId: z.string(),
-  }),
+    applicantPeerId: z.string()
+  })
 });
 
 export const BusyMessageSchema = z.object({
   type: z.literal(DifferentWebRTCSignallingServerMessages.Busy),
   payload: z.object({
-    donorId: z.string(),
-  }),
+    donorId: z.string()
+  })
 });
 
 export const ErrorMessageSchema = z.object({
   type: z.literal(DifferentWebRTCSignallingServerMessages.Error),
-  payload: z.null(),
+  payload: z.null()
 });
 
 export const WebRTCSignallingServerMessagesSchema = z.union([
   ConsentMessageSchema,
   PermissionMessageSchema,
   BusyMessageSchema,
-  ErrorMessageSchema,
+  ErrorMessageSchema
 ]);
 
 // WEB SOCKET SERVER INPUTS FROM CLIENT VALIDATORS
 export const JoinRoomsMessageSchema = z.object({
   type: z.literal(DifferentRoomMessages.JoinRooms),
   payload: z.object({
-    roomIds: z.array(z.string()),
-  }),
+    roomIds: z.array(z.string())
+  })
 });
 
 // export const LeaveRoomsMessageSchema = z.object({
@@ -135,8 +135,8 @@ export const UserTypingMessageSchema = z.object({
   type: z.literal(UserActivity.Typing),
   payload: z.object({
     roomId: z.string(),
-    userId: z.string(),
-  }),
+    userId: z.string()
+  })
 });
 
 export const CreateRoomMessageSchema = z.object({
@@ -146,8 +146,8 @@ export const CreateRoomMessageSchema = z.object({
     donorId: z.string(),
     donorName: z.string(),
     donorImage: z.string(),
-    roomId: z.string(),
-  }),
+    roomId: z.string()
+  })
 });
 
 const CreateRoomResponseSchema = z.object({
@@ -161,9 +161,9 @@ const CreateRoomResponseSchema = z.object({
     participant: z.object({
       id: z.string(),
       isOnline: z.boolean(),
-      isTyping: z.boolean(),
-    }),
-  }),
+      isTyping: z.boolean()
+    })
+  })
 });
 
 export const WebSocketsServerMessagesSchema = z.union([
@@ -175,7 +175,7 @@ export const WebSocketsServerMessagesSchema = z.union([
   ChatMessageSeenSchema,
   UserOnlineSchema,
   UserTypingMessageSchema,
-  UserOfflineSchema,
+  UserOfflineSchema
 ]);
 
 // WEBSOCKET SERVER INPUTS FROM PUBSUB VALIDATORS
@@ -186,5 +186,5 @@ export const WebSocketsServerResponsesSchema = z.union([
   ChatMessageReceivedSchema,
   ChatMessageSeenSchema,
   UserTypingMessageSchema,
-  UserOfflineSchema,
+  UserOfflineSchema
 ]);

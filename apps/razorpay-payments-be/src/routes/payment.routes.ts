@@ -4,7 +4,7 @@ import { createUPIPaymentLink, verifyPaymentWebhook } from "../services/payment.
 import { Logger } from "@repo/common/logger";
 import { NODE_ENV } from "../env";
 import { PaymentStatus, prisma } from "@repo/mongodb";
-import { ApplicationStatus } from "@repo/common/types";
+import { ApplicationStatus, UserRole } from "@repo/common/types";
 
 const logger = new Logger();
 const paymentRoutes = express.Router();
@@ -89,22 +89,29 @@ paymentRoutes.post("/razorpay/webhook", async (req: Request, res: Response) => {
       const { donorId, applicantId } = event?.payload?.payment_link?.entity?.notes || {};
 
       if (!donorId || !applicantId) {
-        await prisma.application.update({
-          where: { authorId: applicantId },
-          data: {
-            donorUserId: donorId,
-            status: ApplicationStatus.Donated
-          }
+        await prisma.$transaction(async (tx) => {
+          await tx.application.update({
+            where: { authorId: applicantId },
+            data: {
+              donorUserId: donorId,
+              status: ApplicationStatus.Donated
+            }
+          });
+          await tx.razorpayTransaction.update({
+            where: { paymentLinkId },
+            data: {
+              status,
+              updatedAt: new Date()
+            }
+          });
+          await tx.user.update({
+            where: { id: applicantId },
+            data: {
+              role: UserRole.Applicant
+            }
+          });
         });
       }
-
-      await prisma.razorpayTransaction.update({
-        where: { paymentLinkId },
-        data: {
-          status,
-          updatedAt: new Date()
-        }
-      });
     }
 
     res.json({ status: "ok" });
@@ -113,59 +120,4 @@ paymentRoutes.post("/razorpay/webhook", async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Webhook processing failed" });
   }
 });
-
-// paymentRoutes.get(
-//   "/status/:referenceId",
-//   async (req: Request, res: Response) => {
-//     try {
-//       const { referenceId } = req.params;
-
-//       const transaction = await prisma.razorpayTransaction.findUnique({
-//         where: { referenceId: referenceId },
-//       });
-
-//       if (!transaction) {
-//         res.status(404).json({ msg: "Transaction not found" });
-//         return;
-//       }
-
-//       // Fetch latest payment status from Razorpay
-//       const paymentLink = await new Promise<any>((resolve, reject) => {
-//         razorpay.paymentLink.fetch(transaction.paymentLinkId, (err, data) => {
-//           if (err) reject(err);
-//           resolve(data);
-//         });
-//       });
-
-//       // Map Razorpay status to our PaymentStatus enum
-//       const status = mapRazorpayStatus(paymentLink.status);
-
-//       // Update transaction status if needed
-//       if (status !== transaction.status) {
-//         await prisma.razorpayTransaction.update({
-//           where: { id: transaction.id },
-//           data: {
-//             status,
-//             updatedAt: new Date(),
-//           },
-//         });
-//       }
-
-//       res.json({
-//         status,
-//         amount: transaction.amount,
-//         currency: transaction.currency,
-//         referenceId: transaction.referenceId,
-//       });
-//     } catch (error) {
-//       const errorMsg = "Failed to fetch payment status";
-//       logger.error(errorMsg, error);
-//       res.status(500).json({
-//         msg: errorMsg,
-//         details: error instanceof Error ? error.message : "Unknown error",
-//       });
-//     }
-//   }
-// );
-
 export { paymentRoutes };

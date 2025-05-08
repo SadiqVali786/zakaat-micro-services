@@ -2,6 +2,10 @@ import React from "react";
 import { fetchApplicationsHandler } from "@/actions/application.action";
 import { ZakaatApplication } from "../../_components/zakaat-application";
 import { ApplicationsInfiniteScrollFeed } from "./_component/applications-infinite-scroll-feed";
+import { redirect } from "next/navigation";
+import { APP_PATHS } from "@/config/path.config";
+import { UserRole } from "@repo/common/types";
+import { auth } from "@/auth";
 
 type SearchParams = {
   longitude?: string;
@@ -14,6 +18,17 @@ interface PageProps {
 }
 
 const DonorGenuineApplicationsPage = async ({ searchParams }: PageProps) => {
+  const session = await auth();
+  if (session?.user.role !== UserRole.Donor) {
+    if (session?.user.role === UserRole.Applicant) {
+      redirect(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Verifier) {
+      redirect(APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT);
+    } else {
+      redirect(APP_PATHS.HOME);
+    }
+  }
+
   const params = await searchParams;
   const longitude = params.longitude || "";
   const latitude = params.latitude || "";

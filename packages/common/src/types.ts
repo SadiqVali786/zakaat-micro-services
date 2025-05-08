@@ -5,14 +5,14 @@ import {
   WebSocketsServerResponsesSchema,
   WebRTCSignallingServerMessagesSchema,
   WorkerMessagesSchema,
-  WorkerResponsesSchema,
+  WorkerResponsesSchema
 } from "./validators";
 
 export enum UserRole {
   Admin = "ADMIN",
   Verifier = "VERIFIER",
   Donor = "DONOR",
-  Applicant = "APPLICANT",
+  Applicant = "APPLICANT"
 }
 
 export enum WebRTCCallStatus {
@@ -20,44 +20,44 @@ export enum WebRTCCallStatus {
   Incoming = "INCOMING",
   Outgoing = "OUTGOING",
   Connected = "CONNECTED",
-  Busy = "BUSY",
+  Busy = "BUSY"
 }
 
 export enum ApplicationStatus {
   Created = "CREATED",
   Donated = "DONATED",
   Verified = "VERIFIED",
-  Bookmarked = "BOOKMARKED",
+  Bookmarked = "BOOKMARKED"
 }
 
 export enum UserStatus {
   Online = "ONLINE",
-  Offline = "OFFLINE",
+  Offline = "OFFLINE"
 }
 
 export enum UserActivity {
   Typing = "TYPING",
   Chatting = "CHATTING",
-  OnboardingEmail = "ONBOARDING_EMAIL",
+  OnboardingEmail = "ONBOARDING_EMAIL"
 }
 
 export enum DifferentMessageStatus {
   Received = "RECEIVED",
   Seen = "SEEN",
-  Sent = "SENT",
+  Sent = "SENT"
 }
 
 export enum DifferentRoomMessages {
   JoinRooms = "JOIN_ROOMS",
   // LeaveRooms = "LEAVE_ROOMS",
-  CreateRoom = "CREATE_ROOM",
+  CreateRoom = "CREATE_ROOM"
 }
 
 export enum DifferentWebRTCSignallingServerMessages {
   Consent = "CONSENT",
   Permission = "PERMISSION",
   Busy = "BUSY",
-  Error = "ERROR",
+  Error = "ERROR"
 }
 
 export type Client = {
@@ -89,13 +89,7 @@ export type TokenPayloadType = {
 export type WorkerMessages = z.infer<typeof WorkerMessagesSchema>;
 export type WorkerResponses = z.infer<typeof WorkerResponsesSchema>;
 
-export type WebRTCSignallingServerMessages = z.infer<
-  typeof WebRTCSignallingServerMessagesSchema
->;
+export type WebRTCSignallingServerMessages = z.infer<typeof WebRTCSignallingServerMessagesSchema>;
 
-export type WebSocketsServerMessages = z.infer<
-  typeof WebSocketsServerMessagesSchema
->;
-export type WebSocketsServerResponses = z.infer<
-  typeof WebSocketsServerResponsesSchema
->;
+export type WebSocketsServerMessages = z.infer<typeof WebSocketsServerMessagesSchema>;
+export type WebSocketsServerResponses = z.infer<typeof WebSocketsServerResponsesSchema>;

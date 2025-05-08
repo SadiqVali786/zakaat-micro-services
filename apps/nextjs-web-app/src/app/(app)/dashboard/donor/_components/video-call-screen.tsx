@@ -26,7 +26,7 @@ export const VideoCallScreen = ({
     useVideoCallStore();
 
   return (
-    <div className="bg-neutral-11 relative h-full max-h-[60rem] max-w-[30rem]">
+    <div className="bg-neutral-11 relative mx-auto h-full max-h-[60rem] max-w-[30rem]">
       {/* Remote Video (Large) */}
       <video
         ref={remoteVideoRef}

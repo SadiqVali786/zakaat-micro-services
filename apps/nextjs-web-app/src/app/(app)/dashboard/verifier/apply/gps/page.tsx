@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPinCheckInside } from "lucide-react";
 import gpsInfoGraphic from "@/../public/info-graphics/gps-info-graphics.png";
 import Image from "next/image";
+import { APP_PATHS } from "@/config/path.config";
+import { UserRole } from "@repo/common/types";
+import { useSession } from "next-auth/react";
 
 const applyGpsSchema = applySchema.pick({
   latitude: true,
@@ -15,6 +18,18 @@ const applyGpsSchema = applySchema.pick({
 
 export default function GPSPage() {
   const router = useRouter();
+
+  const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Verifier) {
+    if (session?.user.role === UserRole.Applicant) {
+      router.push(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Donor) {
+      router.push(APP_PATHS.DONOR_DASHBOARD_MESSAGES);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const setData = useApplyZakaatApplicationStore((state) => state.setData);
   const latitude = useApplyZakaatApplicationStore((state) => state.latitude);
   const longitude = useApplyZakaatApplicationStore((state) => state.longitude);

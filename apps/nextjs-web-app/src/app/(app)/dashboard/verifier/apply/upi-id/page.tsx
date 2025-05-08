@@ -13,6 +13,9 @@ import { useRouter } from "next/navigation";
 import { useApplyZakaatApplicationStore } from "@repo/zustand/src/apply-zakaat-application";
 import { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import { APP_PATHS } from "@/config/path.config";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@repo/common/types";
 
 const applyUPIIDSchema = applySchema.pick({
   upiId: true,
@@ -21,6 +24,18 @@ const applyUPIIDSchema = applySchema.pick({
 
 export default function UPIIDPage() {
   const router = useRouter();
+
+  const { data: session } = useSession();
+  if (session?.user.role !== UserRole.Verifier) {
+    if (session?.user.role === UserRole.Applicant) {
+      router.push(APP_PATHS.APPLICANT_DASHBOARD_MESSAGES);
+    } else if (session?.user.role === UserRole.Donor) {
+      router.push(APP_PATHS.DONOR_DASHBOARD_MESSAGES);
+    } else {
+      router.push(APP_PATHS.HOME);
+    }
+  }
+
   const upiId = useApplyZakaatApplicationStore((state) => state.upiId);
   const email = useApplyZakaatApplicationStore((state) => state.email);
 

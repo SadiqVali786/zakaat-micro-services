@@ -2,6 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zakaat-nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"   # 60 minutes (WebSocket idle time)
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"   # 60 minutes
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"  # 30 seconds (initial connection time)
+    nginx.ingress.kubernetes.io/upgrade: "websocket"
+    # nginx.ingress.kubernetes.io/connection-proxy-header: "upgrade"
+    # nginx.ingress.kubernetes.io/websocket-services: "web-sockets-be,webrtc-signalling-be"
 spec:
   ingressClassName: nginx
   rules:
