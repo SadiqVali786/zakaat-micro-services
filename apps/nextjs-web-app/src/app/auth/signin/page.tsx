@@ -19,7 +19,7 @@ const SigninPage = () => {
             onClick={async () =>
               await signIn("github", {
                 redirect: true,
-                callbackUrl: `${process.env.NEXTAUTH_URL}/${APP_PATHS.WELCOME}`
+                redirectTo: `${process.env.NEXTAUTH_URL || "https://zakaat.sadiqvali.in"}${APP_PATHS.WELCOME}`
               })
             }
           >

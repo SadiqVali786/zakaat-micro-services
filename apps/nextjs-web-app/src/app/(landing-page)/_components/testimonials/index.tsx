@@ -77,7 +77,10 @@ function MarqueeDemo() {
 
 export default function TestimonialsSection() {
   return (
-    <div className="mt-180-to-250-with-768-to-1440 gap-y-60-to-90-with-768-to-1440 flex flex-col items-center">
+    <div
+      className="mt-180-to-250-with-768-to-1440 gap-y-60-to-90-with-768-to-1440 flex flex-col items-center"
+      id="testimonials"
+    >
       <div className="px-8-to-40-with-375-to-768 md:px-40-to-80-with-768-to-1440 flex flex-col gap-y-11">
         <Pill text="✨ Testimonials" className="mx-0 text-center sm:mx-auto" />
         <Heading

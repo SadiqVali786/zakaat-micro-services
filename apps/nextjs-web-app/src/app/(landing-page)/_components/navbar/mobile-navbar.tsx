@@ -3,12 +3,19 @@ import { useSession } from "next-auth/react";
 import { Menu } from "lucide-react";
 import { CompanyLogo } from "./company-logo";
 import Link from "next/link";
-import { NAVBAR_MENU_ITEMS } from "@/constants/app.constant";
+import {
+  GUEST_NAVBAR_MENU_ITEMS,
+  APPLICANT_NAVBAR_MENU_ITEMS,
+  VERIFIER_NAVBAR_MENU_ITEMS,
+  DONOR_NAVBAR_MENU_ITEMS,
+  ADMIN_NAVBAR_MENU_ITEMS
+} from "@/constants/app.constant";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { APP_PATHS } from "@/config/path.config";
 import { Separator } from "@/components/ui/separator";
 import { signOut } from "next-auth/react";
+import { UserRole } from "@repo/common/types";
 
 export const MobileNavbar = () => {
   const { data: session, status } = useSession();
@@ -25,18 +32,70 @@ export const MobileNavbar = () => {
             <CompanyLogo />
           </SheetTitle>
           <ul className="mt-8 flex w-full flex-col items-start">
-            {NAVBAR_MENU_ITEMS.map((item) => (
-              <Link
-                href={item.link}
-                key={item.title}
-                className={cn(
-                  "text-neutral-7 w-full py-2 pl-2 text-lg font-normal",
-                  pathname === item.link && "bg-neutral-11 text-xl text-blue-50"
-                )}
-              >
-                {item.title}
-              </Link>
-            ))}
+            {status !== "authenticated"
+              ? GUEST_NAVBAR_MENU_ITEMS.map((item) => (
+                  <Link
+                    href={item.link}
+                    key={item.title}
+                    className={cn(
+                      "text-neutral-7 w-full py-2 pl-2 text-lg font-normal",
+                      pathname === item.link && "bg-neutral-11 text-xl text-blue-50"
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                ))
+              : status === "authenticated" && session?.user?.role === UserRole.Applicant
+                ? APPLICANT_NAVBAR_MENU_ITEMS.map((item) => (
+                    <Link
+                      href={item.link}
+                      key={item.title}
+                      className={cn(
+                        "text-neutral-7 w-full py-2 pl-2 text-lg font-normal",
+                        pathname === item.link && "bg-neutral-11 text-xl text-blue-50"
+                      )}
+                    >
+                      {item.title}
+                    </Link>
+                  ))
+                : status === "authenticated" && session.user.role === UserRole.Verifier
+                  ? VERIFIER_NAVBAR_MENU_ITEMS.map((item) => (
+                      <Link
+                        href={item.link}
+                        key={item.title}
+                        className={cn(
+                          "text-neutral-7 w-full py-2 pl-2 text-lg font-normal",
+                          pathname === item.link && "bg-neutral-11 text-xl text-blue-50"
+                        )}
+                      >
+                        {item.title}
+                      </Link>
+                    ))
+                  : status === "authenticated" && session.user.role === UserRole.Donor
+                    ? DONOR_NAVBAR_MENU_ITEMS.map((item) => (
+                        <Link
+                          href={item.link}
+                          key={item.title}
+                          className={cn(
+                            "text-neutral-7 w-full py-2 pl-2 text-lg font-normal",
+                            pathname === item.link && "bg-neutral-11 text-xl text-blue-50"
+                          )}
+                        >
+                          {item.title}
+                        </Link>
+                      ))
+                    : ADMIN_NAVBAR_MENU_ITEMS.map((item) => (
+                        <Link
+                          href={item.link}
+                          key={item.title}
+                          className={cn(
+                            "text-neutral-7 w-full py-2 pl-2 text-lg font-normal",
+                            pathname === item.link && "bg-neutral-11 text-xl text-blue-50"
+                          )}
+                        >
+                          {item.title}
+                        </Link>
+                      ))}
           </ul>
           <Separator className="my-8" />
           {status === "unauthenticated" && (

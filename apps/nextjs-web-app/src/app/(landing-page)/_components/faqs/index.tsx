@@ -31,7 +31,10 @@ const FAQS = [
 
 export default function FaqsSection() {
   return (
-    <div className="mt-180-to-250-with-768-to-1440 px-8-to-40-with-375-to-768 md:px-40-to-80-with-768-to-1440 gap-y-60-to-90-with-768-to-1440 mx-auto flex flex-col items-center">
+    <div
+      className="mt-180-to-250-with-768-to-1440 px-8-to-40-with-375-to-768 md:px-40-to-80-with-768-to-1440 gap-y-60-to-90-with-768-to-1440 mx-auto flex flex-col items-center"
+      id="faqs"
+    >
       <div className="flex flex-col gap-y-11">
         <Pill text="✨ Frequently Asked Questions" className="mx-0 text-center sm:mx-auto" />
         <Heading

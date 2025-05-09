@@ -6,23 +6,25 @@ export const APP_PATHS = {
   DONOR_DASHBOARD_BOOKMARKED_APPLICATIONS: "/dashboard/donor/bookmarked-applications",
   DONOR_DASHBOARD_DONATIONS_HISTORY: "/dashboard/donor/donations-history",
   DONOR_DASHBOARD_VIDEO_CALL: "/dashboard/donor/video-call",
+  DONOR_DASHBOARD_LOCATION_SETTINGS: "/dashboard/donor/location-settings",
 
   VERIFIER_DASHBOARD_SEARCH_APPLICANT: "/dashboard/verifier/search-applicant",
   VERIFIER_DASHBOARD_APPLY: "/dashboard/verifier/apply/upi-id",
 
-  APPLICANT_DASHBOARD_APPLICATION: "/dashboard/applicant/application",
+  APPLICANT_DASHBOARD_APPLICATION: "#",
   APPLICANT_DASHBOARD_VIDEO_CALL: "/dashboard/applicant/video-call",
   APPLICANT_DASHBOARD_MESSAGES: "/dashboard/applicant/messages",
 
   WELCOME: "/welcome",
-
-  PROFILE: "/profile",
-  HOME: "/",
   SIGNIN: "/auth/signin",
+
+  HOME: "/",
+  PROFILE: "#",
+  DOWNLOAD: "#",
   ABOUT: "#about",
-  DOWNLOAD: "/download",
-  ABOUT_US: "/about-us",
-  CONTACT_US: "mailto:rebirth4vali@gmail.com",
   TESTIMONIALS: "#testimonials",
-  FAQS: "#faq"
+  FAQS: "#faqs",
+
+  ABOUT_US: "/about-us",
+  CONTACT_US: "mailto:rebirth4vali@gmail.com"
 };

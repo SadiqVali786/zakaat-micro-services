@@ -8,7 +8,10 @@ import { Pill } from "../global";
 
 export const About = () => {
   return (
-    <section className="mt-180-to-250-with-768-to-1440 relative flex flex-col items-center justify-center gap-y-[3.75rem] overflow-x-hidden">
+    <section
+      className="mt-180-to-250-with-768-to-1440 relative flex flex-col items-center justify-center gap-y-[3.75rem] overflow-x-hidden"
+      id="about"
+    >
       <Pill text="✨ Get Started For Free" />
       <Link href="#" className="w-[48rem] self-start md:w-full md:self-center">
         <Image src={AboutProduct} alt="Youtube Video" className="mx-auto" />

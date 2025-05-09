@@ -27,7 +27,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <EmptyRightSidebar />
           </div>
         </div>
-        {/* <ApplicantMobileMenubar /> */}
+        <ApplicantMobileMenubar />
       </SidebarProvider>
     </div>
   );

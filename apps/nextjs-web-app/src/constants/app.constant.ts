@@ -1,13 +1,81 @@
 import { APP_PATHS } from "@/config/path.config";
 
-export const NAVBAR_MENU_ITEMS = [
+export const GUEST_NAVBAR_MENU_ITEMS = [
+  {
+    title: "Home",
+    link: APP_PATHS.HOME
+  },
+  {
+    title: "About",
+    link: APP_PATHS.ABOUT
+  },
+  {
+    title: "Testimonials",
+    link: APP_PATHS.TESTIMONIALS
+  },
+  {
+    title: "Faqs",
+    link: APP_PATHS.FAQS
+  },
+  {
+    title: "Download",
+    link: APP_PATHS.DOWNLOAD
+  }
+];
+
+export const ADMIN_NAVBAR_MENU_ITEMS = [
+  {
+    title: "Home",
+    link: APP_PATHS.HOME
+  },
+  {
+    title: "Download",
+    link: APP_PATHS.DOWNLOAD
+  }
+];
+
+export const APPLICANT_NAVBAR_MENU_ITEMS = [
+  {
+    title: "Home",
+    link: APP_PATHS.HOME
+  },
+  {
+    title: "My application",
+    link: APP_PATHS.APPLICANT_DASHBOARD_APPLICATION
+  },
+  {
+    title: "Messages",
+    link: APP_PATHS.APPLICANT_DASHBOARD_MESSAGES
+  },
+  {
+    title: "Download",
+    link: APP_PATHS.DOWNLOAD
+  }
+];
+
+export const VERIFIER_NAVBAR_MENU_ITEMS = [
+  {
+    title: "Search Applicant",
+    link: APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT
+  },
+  {
+    title: "Apply",
+    link: APP_PATHS.VERIFIER_DASHBOARD_APPLY
+  },
+  {
+    title: "Download",
+    link: APP_PATHS.DOWNLOAD
+  }
+];
+
+export const DONOR_NAVBAR_MENU_ITEMS = [
   {
     title: "Home",
     link: APP_PATHS.HOME
   },
   {
     title: "Applications",
-    link: APP_PATHS.DONOR_DASHBOARD_ZAKAAT_APPLICATIONS
+    link: APP_PATHS.DONOR_DASHBOARD_LOCATION_SETTINGS
   },
   {
     title: "Tweets",
@@ -22,125 +90,3 @@ export const NAVBAR_MENU_ITEMS = [
     link: APP_PATHS.DOWNLOAD
   }
 ];
-
-// export const donorSidebar = [
-//   {
-//     label: "Tweets",
-//     path: APP_PATHS.TWEETS,
-//     icon: ICONS.tweets
-//   },
-//   {
-//     label: "Following Tweets",
-//     path: APP_PATHS.FOLLOWING_TWEETS,
-//     icon: ICONS["following-tweets"]
-//   },
-//   {
-//     label: "Zakaat Applications",
-//     path: APP_PATHS.ZAKAAT_APPLICATIONS,
-//     icon: ICONS["zakaat-applications"]
-//   },
-//   {
-//     label: "Bookmarks",
-//     path: APP_PATHS.BOOKMARKED_APPLICATIONS,
-//     icon: ICONS.bookmarks
-//   },
-//   {
-//     label: "Donations History",
-//     path: APP_PATHS.DONATIONS_HISTORY,
-//     icon: ICONS["donations-history"]
-//   }
-// ];
-
-// export const guestSidebar = [
-//   {
-//     label: "Tweets",
-//     path: APP_PATHS.GUEST_TWEETS,
-//     icon: ICONS.tweets
-//   },
-//   {
-//     label: "Zakaat Applications",
-//     path: APP_PATHS.GUEST_ZAKAAT_APPLICATIONS,
-//     icon: ICONS["zakaat-applications"]
-//   }
-// ];
-
-// export const verifierSidebar = [
-//   {
-//     label: "Search Applicant",
-//     path: APP_PATHS.SEARCH_APPLICANT,
-//     icon: ICONS["search-black"]
-//   },
-//   {
-//     label: "Apply",
-//     path: APP_PATHS.APPLY,
-//     icon: ICONS["apply-zakaat-application"]
-//   },
-//   {
-//     label: "Edit",
-//     path: APP_PATHS.EDIT_APPLICATION,
-//     icon: ICONS.edit
-//   }
-// ];
-
-// export const socials = [
-//   {
-//     id: 1,
-//     icon: ICONS.youtube,
-//     alt: "youtube",
-//     href: "https://www.youtube.com/@100xDevs-n1w"
-//   },
-//   {
-//     id: 2,
-//     icon: ICONS.twitter,
-//     alt: "twitter",
-//     href: "https://x.com/100xDevs"
-//   },
-//   {
-//     id: 3,
-//     icon: ICONS.facebook,
-//     alt: "facebook",
-//     href: "https://x.com/100xDevs"
-//   }
-// ];
-
-// export const footerItems = [
-//   {
-//     label: "About Us",
-//     href: "/"
-//   },
-//   {
-//     label: "Terms of Service",
-//     href: "/"
-//   },
-//   {
-//     label: "Privacy Policy",
-//     href: "/"
-//   },
-//   {
-//     label: "Faqs",
-//     href: "/"
-//   },
-//   {
-//     label: "Contact Us",
-//     href: "/"
-//   },
-//   {
-//     label: "Testimonials",
-//     href: "/"
-//   }
-// ];
-
-// export const trustedSocialActivists = [
-//   {
-//     icon: ICONS.youtube,
-//     name: "Wali Rahmani"
-//   },
-//   {
-//     icon: ICONS.youtube,
-//     name: "HYC Salman Khan"
-//   },
-//   {
-//     icon: ICONS.youtube,
-//     name: "Real Miya Bhai"
-//   }
-// ];

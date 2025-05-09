@@ -4,8 +4,7 @@ import { useDonorLocationStore } from "@repo/zustand/src/location-store";
 import { useEffect } from "react";
 import gpsInfoGraphic from "@/../public/info-graphics/gps-info-graphics.png";
 import Image from "next/image";
-import { ArrowRight, MapPinCheckInside } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPinCheckInside } from "lucide-react";
 import { APP_PATHS } from "@/config/path.config";
 import { UserRole } from "@repo/common/types";
 import { useSession } from "next-auth/react";
@@ -80,52 +79,3 @@ export default function CollectGpsValues() {
     </div>
   );
 }
-
-// "use client";
-// import { useRouter } from "next/navigation";
-// import { useDonorLocationStore } from "@repo/zustand/src/location-store";
-// import { useEffect } from "react";
-
-// export default function CollectGpsValues() {
-//   const router = useRouter();
-//   const setLocation = useDonorLocationStore((state) => state.setLocation);
-//   const latitude = useDonorLocationStore((state) => state.latitude);
-//   const longitude = useDonorLocationStore((state) => state.longitude);
-
-//   useEffect(() => {
-//     if (latitude && longitude) {
-//       router.push(
-//         `/dashboard/donor/zakaat-applications?longitude=${longitude}&latitude=${latitude}`
-//       );
-//     }
-//   }, [latitude, longitude, router]);
-
-//   const setLatAndLongValues = () => {
-//     if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition(
-//         (position) => {
-//           setLocation(position.coords.latitude, position.coords.longitude);
-//           router.push(
-//             `/dashboard/donor/zakaat-applications?longitude=${position.coords.longitude}&latitude=${position.coords.latitude}`
-//           );
-//         },
-//         (error) => console.error("Error fetching GPS values:", error)
-//       );
-//     } else console.error("Geolocation is not supported by this browser.");
-//   };
-
-//   return (
-//     <div className="flex w-full items-center justify-center gap-x-2 rounded-lg border border-[#211f30] bg-gradient-to-b from-[#030014] to-[#292637] px-4 py-2">
-//       <span className="text-neutral-7 text-lg font-bold">GPS Coordinates</span>
-//       <button
-//         className="flex items-center justify-center gap-x-2 rounded-lg border border-[#211f30] bg-gradient-to-b from-[#030014] to-[#292637] px-4 py-2"
-//         type="button"
-//         onClick={setLatAndLongValues}
-//       >
-//         <span className="text-neutral-7 text-lg font-bold">
-//           {latitude}, {longitude}
-//         </span>
-//       </button>
-//     </div>
-//   );
-// }
