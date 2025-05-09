@@ -4,7 +4,6 @@ import { applySchema } from "@/app/(app)/dashboard/verifier/apply/_schema/valida
 import { auth } from "@/auth";
 import { APP_PATHS } from "@/config/path.config";
 import { APPLICATIONS_PER_PAGE } from "@/config/server-actions.config";
-import { uploadFile } from "@/lib/upload-file";
 import { ApplicationWithAuthorAndVerifier } from "@/types/fetch-application-action.type";
 import { ApplicationStatus, UserRole } from "@repo/common/types";
 import { prisma } from "@repo/mongodb";

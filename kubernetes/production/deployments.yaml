@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
         - name: razorpay-payments-be
-          image: 715873012446.dkr.ecr.eu-north-1.amazonaws.com/sadiq/razorpay-payments-be:latest
+          image: 715873012446.dkr.ecr.ap-south-1.amazonaws.com/sadiq/razorpay-payments-be:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8001
@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
         - name: web-sockets-be
-          image: 715873012446.dkr.ecr.eu-north-1.amazonaws.com/sadiq/web-sockets-be:latest
+          image: 715873012446.dkr.ecr.ap-south-1.amazonaws.com/sadiq/web-sockets-be:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8003
@@ -147,7 +147,7 @@ spec:
     spec:
       containers:
         - name: webrtc-signalling-be
-          image: 715873012446.dkr.ecr.eu-north-1.amazonaws.com/sadiq/webrtc-signalling-be:latest
+          image: 715873012446.dkr.ecr.ap-south-1.amazonaws.com/sadiq/webrtc-signalling-be:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8002
@@ -187,7 +187,7 @@ spec:
     spec:
       containers:
         - name: worker-be
-          image: 715873012446.dkr.ecr.eu-north-1.amazonaws.com/sadiq/worker-be:latest
+          image: 715873012446.dkr.ecr.ap-south-1.amazonaws.com/sadiq/worker-be:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: secrets-volume
@@ -233,7 +233,7 @@ spec:
     spec:
       containers:
         - name: fastapi-face-verification-be
-          image: 715873012446.dkr.ecr.eu-north-1.amazonaws.com/sadiq/fastapi-face-verification-be:latest
+          image: 715873012446.dkr.ecr.ap-south-1.amazonaws.com/sadiq/fastapi-face-verification-be:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000

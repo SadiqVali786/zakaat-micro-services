@@ -16,10 +16,12 @@ const SigninPage = () => {
           </div>
           <div
             className="border-neutral-11 flex w-[300px] cursor-pointer items-center justify-center gap-x-5 rounded-xl border px-5 py-[10px]"
-            onClick={async () => await signIn("github", { redirectTo: APP_PATHS.WELCOME })}
+            onClick={async () =>
+              await signIn("github", { redirect: true, callbackUrl: APP_PATHS.WELCOME })
+            }
           >
             <Image src={GoogleLogo} alt="Google logo" />
-            <span>Continue with Google</span>
+            <span>Continue with Github</span>
           </div>
           <p className="w-full text-left">
             No account? <span className="cursor-pointer text-[#4135f3]">Sign up</span>

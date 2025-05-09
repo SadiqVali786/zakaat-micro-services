@@ -25,7 +25,8 @@ class FaceEncodingPipeline:
                 raise ValueError(
                     "Invalid file type. Please upload an image file.")
         except Exception as e:
-            logging.error(f"Error validating input file: {str(e)}")
+            # logging.error(f"Error validating input file: {str(e)}")
+            print(f"Error validating input file: {str(e)}")
             raise CustomException(e)
 
     def process_image(self, file: UploadFile) -> np.ndarray:
@@ -33,7 +34,8 @@ class FaceEncodingPipeline:
         try:
             return process_image_file(file)
         except Exception as e:
-            logging.error(f"Error processing image: {str(e)}")
+            # logging.error(f"Error processing image: {str(e)}")
+            print(f"Error processing image: {str(e)}")
             raise CustomException(e)
 
     def encode_face(self, image: np.ndarray) -> Dict[str, np.ndarray]:
@@ -52,29 +54,36 @@ class FaceEncodingPipeline:
                 "embedding": np.array(representation["embedding"], dtype="f")
             }
         except Exception as e:
-            logging.error(f"Error encoding face: {str(e)}")
+            # logging.error(f"Error encoding face: {str(e)}")
+            print(f"Error encoding face: {str(e)}")
             raise CustomException(e)
 
     def run_pipeline(self, file: UploadFile) -> Dict[str, np.ndarray]:
         """Run the complete face encoding pipeline"""
         try:
-            logging.info("Starting face encoding pipeline")
+            # logging.info("Starting face encoding pipeline")
+            print("Starting face encoding pipeline")
 
             # Step 1: Validate input
-            logging.info("Validating input file")
+            # logging.info("Validating input file")
+            print("Validating input file")
             self.validate_input(file)
 
             # Step 2: Process image
-            logging.info("Processing image file")
+            # logging.info("Processing image file")
+            print("Processing image file")
             processed_image = self.process_image(file)
 
             # Step 3: Encode face
-            logging.info("Encoding face")
+            # logging.info("Encoding face")
+            print("Encoding face")
             result = self.encode_face(processed_image)
 
-            logging.info("Face encoding pipeline completed successfully")
+            # logging.info("Face encoding pipeline completed successfully")
+            print("Face encoding pipeline completed successfully")
             return result
 
         except Exception as e:
-            logging.error(f"Pipeline execution failed: {str(e)}")
+            # logging.error(f"Pipeline execution failed: {str(e)}")
+            print(f"Pipeline execution failed: {str(e)}")
             raise CustomException(e)

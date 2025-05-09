@@ -74,12 +74,17 @@ async def encode_face(file: UploadFile):
     Returns:
     - Face embedding as a numpy array
     """
-    logging.info("Encode face endpoint called")
+    # logging.info("Encode face endpoint called")
+    print("Encode face endpoint called")
+    print(f"File: {file}")
     try:
         result = pipeline.run_pipeline(file)
-        logging.info("Encode face endpoint completed")
-        logging.info(f"Embedding: {result['embedding'].tolist()}")
-
+        # logging.info("Encode face endpoint completed")
+        print("Encode face endpoint completed")
+        print(f"Result: {result}")
+        # logging.info(f"Embedding: {result['embedding'].tolist()}")
+        print(f"Embedding: {result['embedding'].tolist()}")
+        
         return {
             "status": "success",
             # Convert numpy array to list for JSON serialization

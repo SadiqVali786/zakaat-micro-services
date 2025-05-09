@@ -30,12 +30,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log({
-    NEXT_PUBLIC_WEB_SOCKETS_BE_URL: process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL,
-    NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL:
-      process.env.NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL
-  });
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
