@@ -6,7 +6,7 @@ export const APP_PATHS = {
   DONOR_DASHBOARD_BOOKMARKED_APPLICATIONS: "/dashboard/donor/bookmarked-applications",
   DONOR_DASHBOARD_DONATIONS_HISTORY: "/dashboard/donor/donations-history",
   DONOR_DASHBOARD_VIDEO_CALL: "/dashboard/donor/video-call",
-  DONOR_DASHBOARD_LOCATION_SETTINGS: "/dashboard/donor/location-settings",
+  DONOR_DASHBOARD_LOCATION_SETTINGS: "/dashboard/donor/check-donor-gps",
 
   VERIFIER_DASHBOARD_SEARCH_APPLICANT: "/dashboard/verifier/search-applicant",
   VERIFIER_DASHBOARD_APPLY: "/dashboard/verifier/apply/upi-id",

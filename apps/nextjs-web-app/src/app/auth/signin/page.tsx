@@ -18,7 +18,6 @@ const SigninPage = () => {
             className="border-neutral-11 flex w-[300px] cursor-pointer items-center justify-center gap-x-5 rounded-xl border px-5 py-[10px]"
             onClick={async () =>
               await signIn("github", {
-                redirect: true,
                 redirectTo: `${process.env.NEXTAUTH_URL || "https://zakaat.sadiqvali.in"}${APP_PATHS.WELCOME}`
               })
             }

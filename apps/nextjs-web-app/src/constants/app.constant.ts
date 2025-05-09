@@ -55,6 +55,10 @@ export const APPLICANT_NAVBAR_MENU_ITEMS = [
 
 export const VERIFIER_NAVBAR_MENU_ITEMS = [
   {
+    title: "Home",
+    link: APP_PATHS.HOME
+  },
+  {
     title: "Search Applicant",
     link: APP_PATHS.VERIFIER_DASHBOARD_SEARCH_APPLICANT
   },

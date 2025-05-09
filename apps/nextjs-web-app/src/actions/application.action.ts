@@ -288,7 +288,7 @@ type EncodedFaceResponse = {
 
 export const findSimilarFaces = async (selfie: FormData): Promise<SimilarFacesResponse> => {
   try {
-    const url = `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL}/encode_face`;
+    const url = `${process.env.NEXT_PUBLIC_FASTAPI_FACE_VERIFICATION_BE_URL || "http://fastapi-face-verification-be.default.svc.cluster.local"}/encode_face`;
     const response = await fetch(url, { method: "POST", body: selfie });
     const result = (await response.json()) as EncodedFaceResponse;
 
