@@ -8,6 +8,6 @@ vpc:
     gateway: Single # NAT gateway for the cluster
 nodeGroups:
   - name: zakaat-microservices-nodes # Name of the node group
-    instanceType: t4g.medium # Instance type for the nodes
+    instanceType: t3.medium # Instance type for the nodes
     desiredCapacity: 1 # Number of nodes in the node group
     privateNetworking: true # Private networking for the node group

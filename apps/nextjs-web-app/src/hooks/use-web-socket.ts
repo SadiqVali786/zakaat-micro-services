@@ -38,7 +38,7 @@ export const useWebSocket = () => {
 
     const connect = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL}?token=${session.jwtToken}`;
+        const url = `${process.env.NEXT_PUBLIC_WEB_SOCKETS_BE_URL || "wss://websockets.sadiqvali.in"}?token=${session.jwtToken}`;
         console.log("Connecting to WebSocket Server", url);
         ws = new WebSocket(url);
 

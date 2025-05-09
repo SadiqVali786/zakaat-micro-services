@@ -31,7 +31,7 @@ export const useWebRTCSignaling = () => {
 
     const connect = () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL}?token=${session.jwtToken}`;
+        const url = `${process.env.NEXT_PUBLIC_WEB_RTC_SIGNALLING_SERVER_BE_URL || "wss://signalling.sadiqvali.in"}?token=${session.jwtToken}`;
         console.log("Connecting to WebRTC Signaling Server", url);
         ws = new WebSocket(url);
 

@@ -5,7 +5,7 @@ controller:
       service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
       service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
       service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-south-1:715873012446:certificate/5d7559ad-1078-4218-b692-51a8602af886"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-south-1:590183768929:certificate/9bcd3b7e-5308-406e-9388-27e3eb5246c7"
       service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
       service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy: "ELBSecurityPolicy-TLS13-1-2-2021-06"
       service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
