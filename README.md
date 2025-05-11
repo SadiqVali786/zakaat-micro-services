@@ -1,147 +1,169 @@
-# Zakaat Distribution Platform - A Full-Stack Microservices Architecture
+# 🤝 Zakaat: Connecting Donors with the Truly Deserving Applicants
 
-## 🚀 Project Overview
+_A Turborepo-based, 6-Microservice Web App_
 
-A sophisticated Zakaat distribution platform that leverages cutting-edge technology to connect donors with verified beneficiaries. Built with a microservices architecture, this platform ensures secure, efficient, and transparent Zakaat distribution while maintaining the highest standards of privacy and security.
+![Zakaat App Hero Section](apps/nextjs-web-app/public/github/hero-section.png)
 
-### 🎨 UI/UX Design
+👋 **Hey there!**  
+I'm Sadiq Vali, a Computer Vision Deep Learning Engineer turned Figma UI Designer, Full-Stack Web Developer, React Native Mobile Dev, and budding DevOps Engineer.
 
-- **Figma Design:** [View Design](https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=80-18620&t=n6i2BK4lvv9QF8oc-1)
-- **Design Philosophy:** Created with a focus on accessibility, user experience, and modern design principles
-- **Responsive Design:** Seamless experience across web and mobile platforms
+Recently, I built something close to my heart—**Zakaat**, a platform that directly connects donors with those in genuine need, without middlemen or delays.
 
-### 📱 Platform Preview
+This README walks you through the journey, design, architecture, tech stack, and key user flows that make Zakaat a one-of-a-kind solution.
 
-![Zakaat App Details](apps/nextjs-web-app/public/images/git-display.png)
+---
 
-## 🛠️ Technical Architecture
+## 🚀 Why Zakaat?
 
-### Frontend Stack
+Charity often gets lost in middlemen, lack of trust, and delayed impact.  
+**Zakaat changes that**—inspired by Islamic giving principles and powered by modern tech.
 
-- **Web Application:** Next.js 15 with TypeScript
-- **Mobile Application:** React Native Expo
-- **Styling:** Tailwind CSS + Shadcn UI Components
-- **State Management:** Zustand for efficient client-side state management
-- **Form Handling:** Multi-step forms with Zod validation
-- **Real-time Features:** WebSocket integration for instant messaging
+### 💡 How it works:
 
-### Backend Services
+- Donations go directly to applicants' bank accounts—**no platform cut**
+- Instant transfers—powered by **UPI & Razorpay**
+- Borderless support—including for global causes like Gaza relief
 
-- **Face Verification:** FastAPI backend with Siamese Network (98.56% accuracy)
-- **WebRTC Signaling:** Custom signaling server for video calls
-- **WebSocket Server:** Real-time communication hub
-- **Payment Processing:** Razorpay integration with webhook support
-- **Worker Service:** Background job processing
-- **Authentication:** NextAuth with OAuth providers
+✅ **No middlemen**  
+✅ **No delays**  
+✅ **No hidden fees**
 
-### Data Layer
+---
 
-- **Database:** MongoDB Atlas
-- **ORM:** Prisma
-- **Caching:** Redis for pub/sub and caching
-- **Proximity Search:** Native MongoDB Atlas proximity search
-- **Vector Search:** Face embedding similarity search
+## 🎨 Design System From Figma, With Love
 
-### DevOps & Infrastructure
+![Figma Design System](apps/nextjs-web-app/public/github/figma-design-system.png)
 
-- **Containerization:** Docker
-- **Orchestration:** Kubernetes
-- **Package Management:** Bun
-- **Development:** Turbo Repo monorepo
-- **CI/CD:** Automated deployment pipelines
+I crafted the entire UI/UX from scratch for both web and mobile apps using **Figma**.
 
-## 🌟 Key Features
+### 🎨 Highlights:
 
-### Security & Verification
+- Custom typography, color palette, and glassmorphism styling
+- Modular components with structured variants & properties
+- Smart, responsive layouts using `clamp()`
+- Prototypes with real user interaction flows
+- Figma Wrap used for consistency & automation
 
-- 🔒 Face Verification System (98.56% accuracy)
-- 🔍 Fraud Detection with AI
-- 🔐 Secure Authentication
-- 🛡️ End-to-end encryption for sensitive data
+💬 **It's more than pretty—it's scalable, structured, and developer-first.**
 
-### Communication
+🔗 **Explore the Figma Design:**  
+[Figma Link](https://www.figma.com/design/VO5aSBXfFWmi5T31LDIQs3/HaqqueZakat?node-id=1215-10091&t=P4iG4ypETgXvG2Ih-1)
 
-- 💬 Real-time chat (WhatsApp-like interface)
-- 📹 Video calls (Omegle-like experience)
-- 🔔 Push notifications
-- 📧 Email notifications with React Email
+![Figma Design](apps/nextjs-web-app/public/github/figma-promo.png)
 
-### Payment & Transactions
+---
 
-- 💳 UPI instant payments
-- 🔄 Automated payment processing
-- 📊 Transaction tracking
-- 🏦 International payment support (coming soon)
+## ⚙️ Tech Stack Built for Speed and Scale
 
-### User Experience
+**Frontend:** Next.js 15, TypeScript, TailwindCSS, Zustand, Shadcn, Magic UI
 
-- 📱 Responsive design
-- 🔄 Optimistic UI updates
-- 📜 Infinite scrolling with pagination
-- 🗺️ Proximity-based search
-- 📝 Twitter-like text tweeting
-- 🔖 Application bookmarking
+**Backend:** FastAPI, Prisma ORM, MongoDB, AuthJS v5, Zod, UploadThing
 
-## 🚀 Future Roadmap
+**Infra:** TurboRepo, Docker, K8s (AWS EKS), Helm, ACM, NGINX + NLB
 
-### Phase 1: Global Expansion
+**Real-time:** WebSockets, Redis, PeerJS, Nodemailer, React Email
 
-- 🌍 International payment integration
-- 💱 Multi-currency support
-- 🌐 Global beneficiary network
+**Payments:** Razorpay + Instant webhook-based capture
 
-### Phase 2: Mobile Enhancement
+**AI/Fraud:** DeepFace + FAISS for face similarity search
 
-- 📱 React Native Expo app
-- 🔄 Offline support
-- 📱 Native features integration
+🚀 **Built with Bun** for blazing-fast dev workflows
 
-### Phase 3: AI & ML Enhancement
+### 🧠 Coming Soon:
 
-- 🎯 Voice analysis for fraud detection
-- 📹 Video analysis for fraud detection
-- 🗣️ Voice-to-text integration
-- 🤖 AI-powered matching system
+- TRPC, Stripe/PayPal
+- React Native Expo
+- React Query + TanStack Router
+- AI-powered recommendations
+- Golang for performance-critical services
 
-### Phase 4: Backend Evolution
+---
 
-- ⚡ tRPC implementation
-- 🦫 Go Lang microservices
-- 🔄 Real-time analytics
-- 📊 Advanced reporting
+## ✨ Highlights of this Project
 
-## 🛠️ Development Setup
+![HLD Diagram](apps/nextjs-web-app/public/github/git-display.png)
 
-```bash
-# Install dependencies
-bun install
+- **Twitter-style tweeting**
+- **WhatsApp-style chat** with real-time messaging
+- **Omegle-style video calling** using PeerJS
+- **Face verification** for fraud detection (Computer Vision + Deep Learning)
+- **Face embedding similarity search** using native MongoDB Atlas
+- **Proximity-based search** natively supported by MongoDB's geo queries
+- **Instant UPI payments** via Razorpay, fully automated using webhooks
+- **Seamless scrolling-based pagination**—no jarring page reloads
 
-# Start development servers
-bun run dev
+---
 
-# Build for production
-bun run build
+## 🔄 Core User Flows
 
-# Run tests
-bun run test
-```
+### 1️⃣ **Fluid Responsive UI & Onboarding New User**
 
-## 📚 Documentation
+- Using `clamp()` for adaptive layouts (no media queries, just smooth scaling).
+- Personalized onboarding email sent automatically via AuthJS v5.
 
-Detailed documentation for each service is available in their respective directories:
+[▶ Watch Demo on Loom](https://www.loom.com/share/dc7e6fa17a6a470382eeff9331fad3e8?sid=7b9d0876-d655-4450-a4a8-d968e07deb8e)
 
-- `/apps/nextjs-web-app/README.md`
-- `/apps/fastapi-face-verification-be/README.md`
-- `/apps/webrtc-signalling-be/README.md`
-- `/apps/web-sockets-be/README.md`
-- `/apps/worker-be/README.md`
-- `/apps/razorpay-payments-be/README.md`
-- `/apps/react-native-expo-app/README.md`
+### 2️⃣ **Apply for Zakaat (Deep Learning, Computer Vision, Siamese Models, FAISS)**
 
-## 🤝 Contributing
+- Face verification using Siamese models.
+- Duplicate detection ensures only genuine applicants proceed.
+- **Powered by FAISS**—handles millions of faces in under 2–3 seconds.
+- **Accuracy:** 98.56% Top-4 tested on a high-variance dataset.
 
-We welcome contributions! Please read our contributing guidelines before submitting pull requests.
+[▶ Watch Demo on Loom](https://www.loom.com/share/3fcd737c51314655922979eecae8fe75?sid=ddfcabc8-0642-4742-8476-a3bd32c4e625)
 
-## 📄 License
+### 3️⃣ **Proximity Search & Bookmark/Unbookmark Applications**
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Discover local applicants using **MongoDB Atlas geo-queries**.
+- Bookmark applications for later donations.
+
+[▶ Watch Demo on Loom](https://www.loom.com/share/8c8f92e97b4744aba9b9d2886de57b17?sid=710d61db-0c96-4b42-b75c-489fc0228a18)
+
+### 4️⃣ **Real-time Chat like WhatsApp**
+
+- Secure, private messaging—no phone numbers exchanged.
+
+[▶ Watch Demo on Loom](https://www.loom.com/share/5a67806f5c65487faa3512c109c74825?sid=53c6805a-495b-4c36-bdee-f432f7c63a31)
+
+### 5️⃣ **Video Calls Like Omegle**
+
+- Private video calls using **PeerJS + WebRTC**.
+- Only donors can initiate; applicants accept/reject.
+
+[▶ Watch Demo on Canva](https://www.canva.com/design/DAGnHWSaWZ0/DMWkDE9GQO5iRslv-A-jKQ/watch?utm_content=DAGnHWSaWZ0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hef0d90a6d4)
+
+### 6️⃣ **Instant UPI Donations**
+
+- Razorpay handles transactions via webhooks.
+- Donors receive instant thank-you notes.
+
+[▶ Watch Demo on Loom](https://www.loom.com/share/eec491c5df4040d8ade21cb2081af885?sid=67e3eb91-b179-4373-9e20-92eea8e81533)
+
+### 7️⃣ **Donor Tweets**
+
+- Social endorsements to build trust.
+
+[▶ Watch Demo on Loom](https://www.loom.com/share/a268385d75684ec6b18e3c45eb6542d0?sid=fe86f32a-ed15-4d3f-8637-9336e296f0a0)
+
+### 8️⃣ **Scrolling-Based Pagination**
+
+- Infinite scrolling for a native app-like experience.
+
+[▶ Watch Demo on Canva](https://www.canva.com/design/DAGnHuPdfTU/iTocr0CfPHoctKtxHN04mw/watch?utm_content=DAGnHuPdfTU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h50618d5dbb)
+
+---
+
+## 🌍 Explore the Platform
+
+🔗 **Live Demo:** [zakaat.sadiqvali.in](https://zakaat.sadiqvali.in)  
+_(Note: If temporarily down, it's likely due to high operational costs.)_
+
+📌 **Connect with me:**
+
+- 🐦 **Twitter/X:** [@rebirth4vali](https://x.com/rebirth4vali)
+- 💼 **LinkedIn:** [Sadiq Vali](https://www.linkedin.com/in/sadiq-vali/)
+- 💻 **GitHub:** [SadiqVali786/zakaat-micro-services](https://github.com/SadiqVali786/zakaat-micro-services)
+
+✨ **If this project inspired you, let's connect!** Whether for collaboration, contribution, or just to share thoughts—I'm always up for meaningful conversations around tech and impact.
+
+— **Sadiq Vali** 🙏
